@@ -1,8 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@inject ApplicationDbContext Db
 @{
     var product = (ProductModel)ViewData["Product"];
+    var reviews = (List<ReviewModel>)ViewData["Reviews"];
+    int reviewsCount = (int)ViewData["ReviewsCount"];
+    string accountRole = "";//khởi tạo khác null sẽ tránh đc lỗi object reference is set to null
+    string accountUserName = Context.Session.GetString("accountUserName");
+    string accountImage = null;
+    bool isLogin;
+    int accountId = -1;
+    if (accountUserName != null)
+    {
+        isLogin = true;
+        accountRole = Context.Session.GetString("accountRole");
+        if (ViewData.ContainsKey("AccountId"))
+        {
+            accountId = (int)ViewData["AccountId"];
+        }
+        if (ViewData.ContainsKey("AccountImage"))
+        {
+            accountImage = (string)ViewData["AccountImage"];
+        }
+    }
+    else
+    {
+        isLogin = false;
+        accountId = -1;
+    }
 }
 <!--  Breadcumb -->
 <div class="container-fluid">
@@ -47,10 +70,12 @@
         </div>
 
         <div class="col-lg-7 pb-5">
+            <input id="productId" type="hidden" value="@product.ProductId"/>
             <h3 class="font-weight-semi-bold">@product.ProductName</h3>
-            <small class="mb-4 text-muted">Created On: @product.ProductModifiedDate </small>
-            @*<c:if test="${ userRole.equalsIgnoreCase('admin')}">
-                </c:if>*@
+            @if(accountRole.Equals("Admin"))
+            {
+                <small class="mb-4 text-muted">Created On: @product.ProductModifiedDate </small>
+            }
             <div class="d-flex mb-3">
                 <div class="text-primary mr-2">
                     <small class="fas fa-star"></small>
@@ -79,26 +104,29 @@
                 </div>
             </div>
             <h3 class="font-weight-semi-bold mb-1">$@product.ProductPrice</h3>
-            <c:if test="${ userRole.equalsIgnoreCase('admin')}">
-                <span class="mb-1">Trang thái: </span>
-                <c:if test="${ product.status==1}">
-                    <span class="mb-1">Bị vô hiệu hóa</span>
+            @if (isLogin)
+            {
+                if (accountRole.Equals("Admin"))
+                {
+                    <span class="mb-1">Trang thái: </span>
+                    @if (product.ProductStatus == 1)
+                    {
+                        <span class="mb-1">Bị vô hiệu hóa</span>
+                        <br>
+                        <br>
+                    }
+                    else
+                    {
+                        <span class="mb-1">Được phép bán</span>
+                        <br>
+                    }
+                    <a class="btn btn-secondary btn-sm" href="/admin/product/changestatus?productId=@product.ProductId">
+                        Change status
+                    </a>
                     <br>
                     <br>
-                </c:if>
-                <c:if test="${ product.status==0}">
-                    <span class="mb-1">Được phép bán</span>
-                    <br>
-                </c:if>
-            </c:if>
-            <c:if test="${ userRole.equalsIgnoreCase('admin')}">
-                <a class="btn btn-secondary btn-sm"
-                   href="<%=request.getContextPath() %>/admin/product/changestatus?productId=${product.productId }">
-                    Change status
-                </a>
-                <br>
-                <br>
-            </c:if>
+                }
+            }
             <div class="d-flex mb-3">
                 <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
                 <form>
@@ -190,7 +218,7 @@
                 <div class="owl-carousel related-carousel">
                     <div class="card product-item border-0">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                            <img class="img-fluid w-100" src="<%=request.getContextPath() %>/img/product-1.jpg" alt="">
+                            <img class="img-fluid w-100" src="~/img/product-1.jpg" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
@@ -205,7 +233,7 @@
                     </div>
                     <div class="card product-item border-0">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                            <img class="img-fluid w-100" src="<%=request.getContextPath() %>/img/product-2.jpg" alt="">
+                            <img class="img-fluid w-100" src="~/img/product-2.jpg" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
@@ -220,7 +248,7 @@
                     </div>
                     <div class="card product-item border-0">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                            <img class="img-fluid w-100" src="<%=request.getContextPath() %>/img/product-3.jpg" alt="">
+                            <img class="img-fluid w-100" src="~/img/product-3.jpg" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
@@ -235,7 +263,7 @@
                     </div>
                     <div class="card product-item border-0">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                            <img class="img-fluid w-100" src="<%=request.getContextPath() %>/img/product-4.jpg" alt="">
+                            <img class="img-fluid w-100" src="~/img/product-4.jpg" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
@@ -250,7 +278,7 @@
                     </div>
                     <div class="card product-item border-0">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                            <img class="img-fluid w-100" src="<%=request.getContextPath() %>/img/product-5.jpg" alt="">
+                            <img class="img-fluid w-100" src="~/img/product-5.jpg" alt="">
                         </div>
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
@@ -273,7 +301,7 @@
         <div class="col">
             <div class="nav nav-tabs justify-content-center border-secondary mb-4">
                 <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (${reviewCount})</a>
+                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (@reviewsCount)</a>
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="tab-pane-1">
@@ -284,17 +312,22 @@
                 <div class="tab-pane fade" id="tab-pane-3">
                     <div class="row">
                         <div class="col-md-6" id="reviews">
-                            <h4 class="mb-4">${reviewCount} review for ${product.productName }</h4>
-                            <c:forEach items="${reviews}" var="review" varStatus="Stt">
+                            <h4 class="mb-4">@reviewsCount review for @product.ProductName</h4>
+                            @foreach(var review in reviews)
+                            {
                                 <div class="media mb-4 review">
-                                    <c:if test="${review.account.images == null }">
-                                        <img src="<%=request.getContextPath()%>/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;height: 50px;">
-                                    </c:if>
-                                    <c:if test="${review.account.images != null }">
-                                        <img src="${review.account.images }" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                    </c:if>
+                                    @if(review.ReviewAccount.AccountImage == null)
+                                    {
+                                        <img src="~/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;height: 50px;">
+
+                                    }
+                                    else
+                                    {
+                                        <img src="@review.ReviewAccount.AccountImage" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+
+                                    }
                                     <div class="media-body">
-                                        <h6>${review.account.username}<small> - <i>${review.dateCreated}</i></small></h6>
+                                        <h6>@review.ReviewAccount.AccountUserName<small> - <i>@review.ReviewDateCreated</i></small></h6>
                                         <div class="text-primary mb-2">
                                             <i class="fas fa-star"></i>
                                             <i class="fas fa-star"></i>
@@ -302,31 +335,22 @@
                                             <i class="fas fa-star-half-alt"></i>
                                             <i class="far fa-star"></i>
                                         </div>
-                                        <p>${review.content}.</p>
+                                        <p>@review.ReviewContent.</p>
                                     </div>
                                 </div>
-                            </c:forEach>
+                            }
                         </div>
                         <div class="col-md-6">
-                            <c:if test="${username != null }">
-                                <c:set var="isLogin" value="true" />
-                            </c:if>
-                            <c:if test="${username == null }">
-                                <c:set var="isLogin" value="false" />
-                            </c:if>
-                            <c:if test="${isLogin == false }">
+                            @if (!isLogin)
+                            {
                                 <div>
                                     <small>
-                                        You currently are not logged in.<a href="/views/common/login.jsp">
-                                            Log
-                                            In
-                                        </a> to make review ?
+                                        You currently are not logged in.<a href="/Common/Account/Login"> Log In</a> to make review ?
                                     </small>
                                 </div>
-                            </c:if>
-
-                            <c:if test="${isLogin == true }">
-                                <c:url value="/common/review/insert" var="reviewControllerUrl"></c:url>
+                            }
+                            else
+                            {
                                 <h4 class="mb-4">Leave a review</h4>
                                 <small>Your email address will not be published. Required fields are marked *</small>
 
@@ -340,32 +364,26 @@
                                         <i class="far fa-star"></i>
                                     </div>
                                 </div>
-                                <form method="post" action="${reviewControllerUrl}" id="myReviewCreate">
+                                <form method="post" action="/Common/Review/Insert" id="myReviewCreate">
                                     <div class="form-group">
-                                        <c:if test="${accountImages == null }">
-                                            <img src="<%=request.getContextPath()%>/img/user.jpg" class="rounded-circle border-1 border-dark" width="75" height="75" />
-                                        </c:if>
-                                        <c:if test="${accountImages != null }">
-                                            <img src="${accountImages }" class="rounded-circle border-1 border-dark" width="75" height="75" />
-                                        </c:if>
-                                        <label for="message"><b>${username}</b> 's review *</label>
-                                        <%
-                                        String username;
-                                        int yourAccountId;
-                                        username = (String) session.getAttribute("username");
-                                        AccountServicesImpl accountServicesImpl = new AccountServicesImpl();
-                                        yourAccountId = accountServicesImpl.findAccountId(username);
-                                        out.println("<input type='hidden' value='" + yourAccountId + "' name='accountId' />");
-                                        %>
-
-                                        <input type="hidden" value="${product.productId }" name="productId" />
+                                        @if(accountImage == null)
+                                        {
+                                            <img src="~/img/user.jpg" class="rounded-circle border-1 border-dark" width="75" height="75" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@accountImage" class="rounded-circle border-1 border-dark" width="75" height="75" />
+                                        }
+                                        <label for="message"><b>@accountUserName 's review *</label>
+                                        <input type="hidden" value="@accountId" name="accountId" />
+                                        <input type="hidden" value="@product.ProductId" name="productId" />
                                         <textarea id="message" name="yourReviewContent" cols="30" rows="5" class="form-control" style="resize:none;" placeholder="Bạn đang nghĩ gì về sản phẩm này?" required></textarea>
                                     </div>
                                     <div class="form-group mb-0">
                                         <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
                                     </div>
                                 </form>
-                            </c:if>
+                            }
                         </div>
                     </div>
                 </div>
@@ -378,69 +396,70 @@
 <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 @section Scripts {
     <script>
-		$(window).scroll(
-				function() {
-					if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
-						loadMore();
-					}});
-		function loadMore() {
-			/* tạo viên amount để Gọi và đếm classname là product */
-			var amount = document.getElementsByClassName("review").length;
-			var productId = ${product.productId};
-			var root = "${pageContext.request.contextPath}"
-			$.ajax({
-				url : root + "/common/review/loadAjax", //send to Controller
-				type : "get", //send it through get method
-				data : {
-					currReviewsCount : amount,
-					productId : productId
-				},
-				success : function(data) {
-					$("#reviews").append(data);
-				},
-				error : function(xhr) {
-				}
-			});
-		};
+        $(window).scroll(
+            function () {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    loadMore();
+                }
+            });
+        function loadMore() {
+            /* tạo viên amount để Gọi và đếm classname là product */
+            var amount = document.getElementsByClassName("review").length;
+            var productId = $("#productId").val();
+            /*var root = "${pageContext.request.contextPath}"*/
+            $.ajax({
+                url: "/Common/Review/LoadAjax", //send to Controller
+                type: "get", //send it through get method
+                data: {
+                    currReviewsCount: amount,
+                    productId: productId
+                },
+                success: function (data) {
+                    $("#reviews").append(data);
+                },
+                error: function (xhr) {
+                }
+            });
+        };
     </script>
     <script>
-		let maxQuantityInt = parseInt(document.getElementById("quantity").max,10);
-		let minQuantityInt = parseInt(document.getElementById("quantity").min,10);
-		const func_AddProductQuantityByOne = function() {
-			const element = document.getElementById("quantity");
-			let quantityString = element.value;
-			let quantityInt = parseInt(quantityString, 10) + 1;
-			if (quantityInt > maxQuantityInt) {
-				alert("Hết hàng")
-			} else {
-				element.value = quantityInt;
-			}
-		}
-		const func_SubtractProductQuantityByOne = function() {
-			const element = document.getElementById("quantity");
-			let quantityString = element.value;
-			let quantityInt = parseInt(quantityString, 10) - 1;
-			if (quantityInt < minQuantityInt) {
-				alert("Số lượng không hợp lệ");
-			} else {
-				element.value = quantityInt;
-			}
-		}
+        let maxQuantityInt = parseInt(document.getElementById("quantity").max, 10);
+        let minQuantityInt = parseInt(document.getElementById("quantity").min, 10);
+        const func_AddProductQuantityByOne = function () {
+            const element = document.getElementById("quantity");
+            let quantityString = element.value;
+            let quantityInt = parseInt(quantityString, 10) + 1;
+            if (quantityInt > maxQuantityInt) {
+                alert("Hết hàng")
+            } else {
+                element.value = quantityInt;
+            }
+        }
+        const func_SubtractProductQuantityByOne = function () {
+            const element = document.getElementById("quantity");
+            let quantityString = element.value;
+            let quantityInt = parseInt(quantityString, 10) - 1;
+            if (quantityInt < minQuantityInt) {
+                alert("Số lượng không hợp lệ");
+            } else {
+                element.value = quantityInt;
+            }
+        }
 
-		const func_changeProductQuantityInCart = function() {
-			var changedProductQuantityInCart = document
-					.getElementById("quantity").value;
-			if (changedProductQuantityInCart > 0) {
-				var pId = ${product.productId};
-				console.log("Hello");
-				var root = "${pageContext.request.contextPath}"
-				window.location.href = root + "/common/cart?productId=" + pId
-						+ "&action=updateToCart&productQuantity="
-						+ changedProductQuantityInCart;
-			} else {
-				alert("Chưa mua hàng");
-			}
-		};
+        const func_changeProductQuantityInCart = function () {
+            var changedProductQuantityInCart = document
+                .getElementById("quantity").value;
+            if (changedProductQuantityInCart > 0) {
+                var pId = ${ product.productId };
+                console.log("Hello");
+                var root = "${pageContext.request.contextPath}"
+                window.location.href = root + "/common/cart?productId=" + pId
+                    + "&action=updateToCart&productQuantity="
+                    + changedProductQuantityInCart;
+            } else {
+                alert("Chưa mua hàng");
+            }
+        };
     </script>
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

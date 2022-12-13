@@ -18,7 +18,7 @@ namespace LearnMVC1.DAO.DAO.Impl
         {
             int wishListUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Delete From WishList Where id_WishList_Account = {accountId} And id_WishList_Product = {productId}");
             if (wishListUpdatedCount == 1)
-                Console.WriteLine("wishList Updated Success");
+                Console.WriteLine("wishList deleted Success");
         }
 
         public List<int> findAllProductId(int accountId)
@@ -31,7 +31,7 @@ namespace LearnMVC1.DAO.DAO.Impl
         {
             int wishListUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Insert Into WishList(id_WishList_Account,id_WishList_Product) Values({accountId},{productId})");
             if (wishListUpdatedCount == 1)
-                Console.WriteLine("wishList Updated Success");
+                Console.WriteLine("wishList inserted Success");
         }
 
         public bool isInWishList(int productId, int accountId)

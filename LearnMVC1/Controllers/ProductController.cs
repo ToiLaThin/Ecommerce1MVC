@@ -17,6 +17,7 @@ namespace LearnMVC1.Controllers
         CategoryDAOImpl categoryDAOImpl;
         WishListDAOImpl wishListDAOImpl;
         AccountDAOImpl accountDAOImpl;
+        ReviewDAOImpl reviewDAOImpl;
 
         public ProductController(ApplicationDbContext db)
         {
@@ -25,6 +26,7 @@ namespace LearnMVC1.Controllers
             categoryDAOImpl = new CategoryDAOImpl(_db);
             accountDAOImpl = new AccountDAOImpl(_db);
             wishListDAOImpl = new WishListDAOImpl(_db);
+            reviewDAOImpl = new ReviewDAOImpl(_db);
         }
 
         [Route("/Common/Product/List")]
@@ -56,7 +58,20 @@ namespace LearnMVC1.Controllers
         public IActionResult Detail(int productId)
         {
             var product = productDAOImpl.find(productId);
+            int allReviewsCount = reviewDAOImpl.loadAllByProduct(productId).Count;
+            List<ReviewModel> reviews = reviewDAOImpl.loadInitTenByProduct(productId);
+            string username = HttpContext.Session.GetString("accountUserName");
+
+            if (username != null)
+            {
+                int accountId = accountDAOImpl.findAccountId(username);
+                ViewData["AccountId"] = accountId;
+                string accountImage = accountDAOImpl.findById(accountDAOImpl.findAccountId(username)).AccountImage;
+                ViewData["AccountImage"] = accountImage;
+            }
             ViewData["Product"] = product;
+            ViewData["Reviews"] = reviews;
+            ViewData["ReviewsCount"] = allReviewsCount;
             return View("Views/Common/ProductDetail.cshtml");
         }
 

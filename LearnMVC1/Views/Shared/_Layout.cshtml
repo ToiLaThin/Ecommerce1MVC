@@ -27,9 +27,10 @@
 @{
     AccountDAOImpl accountDAOImpl = new AccountDAOImpl(Db);
     CategoryDAOImpl categoryDAOImpl = new CategoryDAOImpl(Db);
+    WishListDAOImpl wishListDAOImpl = new WishListDAOImpl(Db);
     string accountUserName = Context.Session.GetString("accountUserName");
     string accountRole = Context.Session.GetString("accountRole");
-    int accountId;   
+    int accountId, wishListSize;
 }
 <body>
     <header>
@@ -87,9 +88,10 @@
                 <div class="col-lg-3 col-6 text-right">
                 @{
                     accountId = accountDAOImpl.findAccountId(accountUserName);
+                    wishListSize = wishListDAOImpl.findAllProductId(accountId).Count;
                     <a href="/Common/WishList/List?accountId=@accountId" class="btn border">
                         <i class="fas fa-heart text-primary"></i>
-                        <span class="badge">0</span>
+                        <span class="badge">@wishListSize</span>
                     </a>
                     <a href="<%=request.getContextPath() %>/common/cart" class="btn border">
                         <i class="fas fa-shopping-cart text-primary"></i>
