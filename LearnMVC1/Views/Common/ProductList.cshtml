@@ -1,14 +1,21 @@
 ﻿@{
     string accountUserName = Context.Session.GetString("accountUserName");
     bool isLogin;
+    int accountId = -1;
     if (accountUserName != null)
     {
         isLogin = true;
+        if (ViewData.ContainsKey("AccountId"))
+        {
+            accountId = (int)ViewData["AccountId"];
+        }
     }
     else
     {
         isLogin = false;
+        accountId = -1;
     }
+
 }
 @model List<ProductModel>
 <!-- Shop Start -->
@@ -213,23 +220,23 @@
                                     </a>
                                     @if(isLogin)
                                     {
-                                        <c:if test="${product.isWished == false }">
-                                            <!-- có thể đưa biến từ jsp tag vào chứ ko cần là attribute -->
-                                            <a href="<%=request.getContextPath() %>/common/wishList/insert?productId=${product.productId }&accountId=<%=accountId %>"
+                                        if(p.IsWished == false)
+                                        {
+                                            <a href="/Common/WishList/Insert?productId=@p.ProductId&accountId=@accountId"
                                                class="btn btn-sm text-dark p-0">
                                                 <i class="far fa-heart text-primary mr-1"></i>Add To Wishlist
                                             </a>
-                                        </c:if>
-                                        <c:if test="${product.isWished == true }">
-                                            <!-- có thể đưa biến từ jsp tag vào chứ ko cần là attribute -->
-                                            <a href="<%=request.getContextPath() %>/common/wishList/delete?productId=${product.productId }&accountId=<%=accountId %>"
+                                        }
+                                        else if(p.IsWished == true)
+                                        {
+                                            <a href="/Common/WishList/Delete?productId=@p.ProductId&accountId=@accountId"
                                                class="btn btn-sm text-dark p-0">
                                                 <i class="fas fa-heart text-primary mr-1"></i>Wished
                                             </a>
-                                        </c:if>
+                                        }
                                     }
                                     else { 
-                                        <a href="/Common/Account/login" class="btn btn-sm text-dark p-0">
+                                        <a href="/Common/Account/Login" class="btn btn-sm text-dark p-0">
                                             <i class="far fa-heart text-primary mr-1"></i>Add To Wishlist
                                         </a>
                                     }

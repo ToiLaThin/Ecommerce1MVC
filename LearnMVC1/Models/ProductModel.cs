@@ -48,5 +48,8 @@ namespace LearnMVC1.Models
 
         [Column("productRevenue")]
         public int ProductRevenue { get; set; } = 0;
+
+        [NotMapped]
+        public bool IsWished { get; set; } = false;
     }
 }
