@@ -26,5 +26,11 @@ namespace LearnMVC1.Models.EntityFramwork
         public DbSet<AccountModel> Accounts{ get; set; }
         public DbSet<ReviewModel> Reviews { get; set; }
         public DbSet<WishListModel> WishLists { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
+        public DbSet<OrderItemModel> OrderItems { get; set; }
+        public DbSet<ReceiptModel> Receipts{ get; set; }
+        public DbSet<SellerModel> Sellers{ get; set; }
+        public DbSet<StoreModel> Stores{ get; set; }
+        public DbSet<InventoryModel> Inventories{ get; set; }
     }
 }

@@ -4,14 +4,16 @@ using LearnMVC1.Models.EntityFramwork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LearnMVC1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221213162916_AddSellerStoreInventoryToDb")]
+    partial class AddSellerStoreInventoryToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,15 +249,9 @@ namespace LearnMVC1.Migrations
                         .HasColumnName("productStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnName("id_Product_Seller")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("SellerId");
 
                     b.ToTable("Product");
                 });
@@ -459,12 +455,6 @@ namespace LearnMVC1.Migrations
                     b.HasOne("LearnMVC1.Models.CategoryModel", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("CategoryId");
-
-                    b.HasOne("LearnMVC1.Models.SellerModel", "ProductSeller")
-                        .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LearnMVC1.Models.ReceiptModel", b =>

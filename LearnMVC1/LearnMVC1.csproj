@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20221212023503_InitProductCategoryInDb.Designer.cs" />
     <Compile Remove="Migrations\20221212093147_AddRoleAccountToDb.cs" />
     <Compile Remove="Migrations\20221212093147_AddRoleAccountToDb.Designer.cs" />
+    <Compile Remove="Migrations\20221213161927_AddSellerStoreInventoryToDb.cs" />
+    <Compile Remove="Migrations\20221213161927_AddSellerStoreInventoryToDb.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

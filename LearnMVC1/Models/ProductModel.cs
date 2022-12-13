@@ -33,14 +33,15 @@ namespace LearnMVC1.Models
         public string ProductDescription { get; set; }
 
         [Required]
-        [Column("productPrice", TypeName = "decimal(18, 6)")]
+        [Column("productPrice", TypeName = "decimal(18, 2)")]
         public decimal ProductPrice { get; set; }
 
         [Column("productImage")]
         public string? ProductImage { get; set; }
 
         [Column("productStatus")]
-        public int ProductStatus { get; set; } = 1;
+        //thay đổi file migration để giá trị mặc định là 0
+        public int ProductStatus { get; set; } = 0;
 
         [Column("productModifiedDate")]
         [DataType(DataType.DateTime)]
@@ -51,5 +52,12 @@ namespace LearnMVC1.Models
 
         [NotMapped]
         public bool IsWished { get; set; } = false;
+
+        [ForeignKey("SellerId")]
+        public SellerModel ProductSeller { get; set; }
+
+        [Column("id_Product_Seller")]
+        [Required]
+        public int? SellerId { get; set; }
     }
 }

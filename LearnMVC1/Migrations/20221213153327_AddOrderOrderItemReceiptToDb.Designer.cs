@@ -4,14 +4,16 @@ using LearnMVC1.Models.EntityFramwork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LearnMVC1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221213153327_AddOrderOrderItemReceiptToDb")]
+    partial class AddOrderOrderItemReceiptToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,35 +98,6 @@ namespace LearnMVC1.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Category");
-                });
-
-            modelBuilder.Entity("LearnMVC1.Models.InventoryModel", b =>
-                {
-                    b.Property<int>("InventoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("inventoryId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("InventoryProductAmount")
-                        .HasColumnName("inventoryProductAmount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnName("id_Inventory_Product")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StoreId")
-                        .HasColumnName("id_Inventory_Store")
-                        .HasColumnType("int");
-
-                    b.HasKey("InventoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Inventory");
                 });
 
             modelBuilder.Entity("LearnMVC1.Models.OrderItemModel", b =>
@@ -247,15 +220,9 @@ namespace LearnMVC1.Migrations
                         .HasColumnName("productStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnName("id_Product_Seller")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("SellerId");
 
                     b.ToTable("Product");
                 });
@@ -335,60 +302,6 @@ namespace LearnMVC1.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("LearnMVC1.Models.SellerModel", b =>
-                {
-                    b.Property<int>("SellerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("sellerId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("SellerImage")
-                        .HasColumnName("sellerImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SellerName")
-                        .IsRequired()
-                        .HasColumnName("sellerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StoreId")
-                        .HasColumnName("id_Seller_Store")
-                        .HasColumnType("int");
-
-                    b.Property<int>("sellerStatus")
-                        .HasColumnName("sellerStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("SellerId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Seller");
-                });
-
-            modelBuilder.Entity("LearnMVC1.Models.StoreModel", b =>
-                {
-                    b.Property<int>("StoreId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("storeId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("StoreCreateDate")
-                        .HasColumnName("storeCreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StoreName")
-                        .IsRequired()
-                        .HasColumnName("storeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StoreId");
-
-                    b.ToTable("Store");
-                });
-
             modelBuilder.Entity("LearnMVC1.Models.WishListModel", b =>
                 {
                     b.Property<int>("AccountId")
@@ -411,21 +324,6 @@ namespace LearnMVC1.Migrations
                     b.HasOne("LearnMVC1.Models.RoleModel", "AccountRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LearnMVC1.Models.InventoryModel", b =>
-                {
-                    b.HasOne("LearnMVC1.Models.ProductModel", "InventoryProduct")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LearnMVC1.Models.StoreModel", "InventoryStore")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -459,12 +357,6 @@ namespace LearnMVC1.Migrations
                     b.HasOne("LearnMVC1.Models.CategoryModel", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("CategoryId");
-
-                    b.HasOne("LearnMVC1.Models.SellerModel", "ProductSeller")
-                        .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LearnMVC1.Models.ReceiptModel", b =>
@@ -487,15 +379,6 @@ namespace LearnMVC1.Migrations
                     b.HasOne("LearnMVC1.Models.ProductModel", "ReviewProduct")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LearnMVC1.Models.SellerModel", b =>
-                {
-                    b.HasOne("LearnMVC1.Models.StoreModel", "SellerStore")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
