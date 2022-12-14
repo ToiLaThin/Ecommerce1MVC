@@ -22,12 +22,14 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void editCategory(CategoryModel category)
         {
-            throw new NotImplementedException();
+            int categoriesUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Update Category Set categoryName={category.CategoryName},categoryImage={category.CategoryImage} Where categoryId={category.CategoryId}");
+            if (categoriesUpdatedCount == 1)
+                Console.WriteLine("Categories updated success");
         }
 
         public CategoryModel find(int categoryId)
         {
-            throw new NotImplementedException();
+            return _db.Categories.Where(c => c.CategoryId == categoryId).First();
         }
 
         public List<CategoryModel> findAll()
@@ -38,7 +40,9 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void insertCategory(CategoryModel category)
         {
-            throw new NotImplementedException();
+            int categoriesInsertedCount = _db.Database.ExecuteSqlInterpolated($"Insert Into Category(categoryName,categoryImage,categoryStatus) Values({category.CategoryName},{category.CategoryImage},0)");
+            if (categoriesInsertedCount == 1)
+                Console.WriteLine("Categories inserted success");
         }
     }
 }

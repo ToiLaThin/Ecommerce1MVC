@@ -1,0 +1,40 @@
+﻿@{
+}
+<div class="container">
+    <h3>All category</h3>
+    <a class="btn btn-success" href="/Admin/Category/Insert">New Category</a>
+    <br>
+    <br>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">CategoryId</th>
+                <th scope="col">CategoryName</th>
+                <th scope="col">Images</th>
+                <th scope="col">Status</th>
+                <th scope="col">Update</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach(CategoryModel category in Model)
+            {
+                <tr scope="row">
+                    <td>@category.CategoryId</td>
+                    <td>@category.CategoryName</td>
+                    <td><img src="@category.CategoryImage" width="80" height="55" alt="category image"></td>
+                    <td>@category.CategoryStatus</td>
+                    <td>
+                        <a class="btn btn-sm btn-danger" href="/Admin/Category/Update?categoryId=@category.CategoryId">Update</a>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <br>
+    <a class="btn btn-primary" href="/Common/Product/List">Back</a>
+    <br>
+    <br>
+
+</div>

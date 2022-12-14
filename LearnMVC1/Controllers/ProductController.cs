@@ -20,6 +20,7 @@ namespace LearnMVC1.Controllers
         AccountDAOImpl accountDAOImpl;
         ReviewDAOImpl reviewDAOImpl;
         InventoryDAOImpl inventoryDAOImpl;
+        StoreDAOImpl storeDAOImpl;
 
         public ProductController(ApplicationDbContext db)
         {
@@ -30,6 +31,7 @@ namespace LearnMVC1.Controllers
             wishListDAOImpl = new WishListDAOImpl(_db);
             reviewDAOImpl = new ReviewDAOImpl(_db);
             inventoryDAOImpl = new InventoryDAOImpl(_db);
+            storeDAOImpl = new StoreDAOImpl(_db);
         }
 
         [Route("/Common/Product/List")]
@@ -155,7 +157,26 @@ namespace LearnMVC1.Controllers
             return View("Views/Common/ProductFilterByCategory.cshtml",productsOfCategory);
         }
 
-
+        [Route("/Common/Product/FilterByStore")]
+        [HttpGet]
+        public IActionResult FilterByStore(int storeId)
+        {
+            StoreModel store = storeDAOImpl.findStore(storeId);
+            List<ProductModel> products = storeDAOImpl.findAllProduct(storeId);
+            if (Global.GlobalVar.IsLogin)
+            {
+                foreach(ProductModel product in products)
+                {
+                    if (wishListDAOImpl.isInWishList(product.ProductId, Global.GlobalVar.AccountId))
+                        product.IsWished = true;
+                    else
+                        product.IsWished = false;
+                }
+            }
+            ViewData["Store"] = store;
+            ViewData["Products"] = products;
+            return View("/Views/Common/ProductFilterByStore.cshtml");
+        }
         #region Seller 's product controller
 
         [Route("/Seller/Product/List")]

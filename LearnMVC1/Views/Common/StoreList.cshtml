@@ -1,0 +1,54 @@
+﻿@model List<StoreModel>
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Shop Product Start -->
+            <div class="row pb-3">
+                <div class="col-4 pb-1 float-right">
+                    <form action="/Common/Store/Search" method="post" role="form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm cửa hàng" name="searchPhrase" required>
+                            <div class="input-group-append">
+                                <button type="submit" class="input-group-text bg-transparent text-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container-fluid pt-5">
+                <div class="row px-xl-5">
+                    <div class="col-lg-12 table-responsive mb-5">
+                        <table class="table table-bordered text-center mb-0">
+                            <thead class="bg-secondary text-dark">
+                                <tr>
+                                    <th>Tên shop</th>
+                                    <th>Ngày thành lập</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @foreach (var store in Model)
+                                {
+                                    <tr>
+                                        <td class="align-middle">@store.StoreName</td>
+                                        <td class="align-middle">@store.StoreCreateDate</td>
+                                        <td class="align-middle">
+                                            <a href="/Common/Product/FilterByStore?storeId=@store.StoreId">
+                                                Xem sản phẩm
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+</div>
+<!-- Shop End -->

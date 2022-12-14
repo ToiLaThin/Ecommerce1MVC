@@ -1,0 +1,16 @@
+﻿@{
+}
+<div class="container mt-5 mb-5">
+    <form method="post" action="/Admin/Category/Insert">
+        <div class="form-group">
+            <label for="categoryName">Category name:</label>
+            <input class="form-control" id="categoryName" placeholder="Enter category 's name" name="categoryName">
+        </div>
+        <div class="form-group">
+            <label for="categoryImage">Category image 's url:</label>
+            <input class="form-control" id="categoryImage" placeholder="category image 's url" name="categoryImage">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-secondary" href="/Admin/Category/List">Back</a>
+    </form>
+</div>
