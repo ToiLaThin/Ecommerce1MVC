@@ -52,5 +52,11 @@ namespace LearnMVC1.Models
         [Required]
         [Column("id_Account_Role")]
         public int RoleId { get; set; }
+
+        //[ForeignKey("SellerId")]
+        //public SellerModel AccountSeller { get; set; }
+
+        //[Column("id_Account_Seller")]
+        //public int? SellerId { get; set; }
     }
 }

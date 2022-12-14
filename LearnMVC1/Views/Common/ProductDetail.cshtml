@@ -3,28 +3,13 @@
     var product = (ProductModel)ViewData["Product"];
     var reviews = (List<ReviewModel>)ViewData["Reviews"];
     int reviewsCount = (int)ViewData["ReviewsCount"];
-    string accountRole = "";//khởi tạo khác null sẽ tránh đc lỗi object reference is set to null
-    string accountUserName = Context.Session.GetString("accountUserName");
     string accountImage = null;
-    bool isLogin;
-    int accountId = -1;
-    if (accountUserName != null)
+    if (GlobalVar.IsLogin)
     {
-        isLogin = true;
-        accountRole = Context.Session.GetString("accountRole");
-        if (ViewData.ContainsKey("AccountId"))
-        {
-            accountId = (int)ViewData["AccountId"];
-        }
         if (ViewData.ContainsKey("AccountImage"))
         {
             accountImage = (string)ViewData["AccountImage"];
         }
-    }
-    else
-    {
-        isLogin = false;
-        accountId = -1;
     }
 }
 <!--  Breadcumb -->
@@ -72,9 +57,10 @@
         <div class="col-lg-7 pb-5">
             <input id="productId" type="hidden" value="@product.ProductId"/>
             <h3 class="font-weight-semi-bold">@product.ProductName</h3>
-            @if(accountRole.Equals("Admin"))
-            {
-                <small class="mb-4 text-muted">Created On: @product.ProductModifiedDate </small>
+            @if(GlobalVar.IsLogin){
+                if(GlobalVar.AccountRole.Equals("Admin")){
+                    <small class="mb-4 text-muted">Created On: @product.ProductModifiedDate </small>
+                }    
             }
             <div class="d-flex mb-3">
                 <div class="text-primary mr-2">
@@ -104,9 +90,9 @@
                 </div>
             </div>
             <h3 class="font-weight-semi-bold mb-1">$@product.ProductPrice</h3>
-            @if (isLogin)
+            @if (GlobalVar.IsLogin)
             {
-                if (accountRole.Equals("Admin"))
+                if (GlobalVar.AccountRole.Equals("Admin"))
                 {
                     <span class="mb-1">Trang thái: </span>
                     @if (product.ProductStatus == 1)
@@ -341,7 +327,7 @@
                             }
                         </div>
                         <div class="col-md-6">
-                            @if (!isLogin)
+                            @if (!GlobalVar.IsLogin)
                             {
                                 <div>
                                     <small>
@@ -374,8 +360,8 @@
                                         {
                                             <img src="@accountImage" class="rounded-circle border-1 border-dark" width="75" height="75" />
                                         }
-                                        <label for="message"><b>@accountUserName 's review *</label>
-                                        <input type="hidden" value="@accountId" name="accountId" />
+                                        <label for="message"><b>@GlobalVar.AccountUserName 's review *</label>
+                                        <input type="hidden" value="@GlobalVar.AccountId" name="accountId" />
                                         <input type="hidden" value="@product.ProductId" name="productId" />
                                         <textarea id="message" name="yourReviewContent" cols="30" rows="5" class="form-control" style="resize:none;" placeholder="Bạn đang nghĩ gì về sản phẩm này?" required></textarea>
                                     </div>

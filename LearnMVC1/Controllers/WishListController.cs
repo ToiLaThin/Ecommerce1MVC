@@ -1,11 +1,13 @@
 ﻿using LearnMVC1.DAO.DAO.Impl;
 using LearnMVC1.Models;
 using LearnMVC1.Models.EntityFramwork;
+using LearnMVC1.Global;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace LearnMVC1.Controllers
 {
@@ -51,7 +53,6 @@ namespace LearnMVC1.Controllers
             {
                 products.Add(productDAOImpl.find(productId));
             }
-            ViewData["AccountId"] = accountId;
             return View("/Views/Common/WishList.cshtml",products);
         }
     }

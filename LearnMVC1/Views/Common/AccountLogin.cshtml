@@ -18,9 +18,10 @@
         <div class="form-group">
             Password: <input class="form-control" type="password" name="password" placeholder="Nhập password của bạn:" required><br>
         </div>
-        @if(loginFailed)
+        @if (loginFailed)
         {
             <span class="text-danger">Login Failed</span>
+            <br>
         }
         <button type="submit" class="btn btn-primary">Login</button>
     </form>

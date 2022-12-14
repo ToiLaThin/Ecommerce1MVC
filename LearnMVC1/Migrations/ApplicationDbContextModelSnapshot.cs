@@ -247,15 +247,9 @@ namespace LearnMVC1.Migrations
                         .HasColumnName("productStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnName("id_Product_Seller")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("SellerId");
 
                     b.ToTable("Product");
                 });
@@ -459,12 +453,6 @@ namespace LearnMVC1.Migrations
                     b.HasOne("LearnMVC1.Models.CategoryModel", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("CategoryId");
-
-                    b.HasOne("LearnMVC1.Models.SellerModel", "ProductSeller")
-                        .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LearnMVC1.Models.ReceiptModel", b =>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -15,6 +15,16 @@
     <Compile Remove="Migrations\20221212093147_AddRoleAccountToDb.Designer.cs" />
     <Compile Remove="Migrations\20221213161927_AddSellerStoreInventoryToDb.cs" />
     <Compile Remove="Migrations\20221213161927_AddSellerStoreInventoryToDb.Designer.cs" />
+    <Compile Remove="Migrations\20221213163107_ModifyProductRefToSellerInDb.cs" />
+    <Compile Remove="Migrations\20221213163107_ModifyProductRefToSellerInDb.Designer.cs" />
+    <Compile Remove="Migrations\20221213164400_ModifyAccounRefToSellerInDb.cs" />
+    <Compile Remove="Migrations\20221213164400_ModifyAccounRefToSellerInDb.Designer.cs" />
+    <Compile Remove="Migrations\20221213164540_ModifyAccounRefToSellerInDb.cs" />
+    <Compile Remove="Migrations\20221213164540_ModifyAccounRefToSellerInDb.Designer.cs" />
+    <Compile Remove="Migrations\20221213164643_ModifyAccounRefToSellerInDb.cs" />
+    <Compile Remove="Migrations\20221213164643_ModifyAccounRefToSellerInDb.Designer.cs" />
+    <Compile Remove="Migrations\20221213164731_ModifyAccounRefToSellerInDb.cs" />
+    <Compile Remove="Migrations\20221213164731_ModifyAccounRefToSellerInDb.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

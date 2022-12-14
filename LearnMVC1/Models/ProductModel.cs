@@ -53,11 +53,11 @@ namespace LearnMVC1.Models
         [NotMapped]
         public bool IsWished { get; set; } = false;
 
-        [ForeignKey("SellerId")]
-        public SellerModel ProductSeller { get; set; }
+        //[ForeignKey("SellerId")]
+        //public SellerModel ProductSeller { get; set; }
 
-        [Column("id_Product_Seller")]
-        [Required]
-        public int? SellerId { get; set; }
+        //[Column("id_Product_Seller")]
+        //[Required]
+        //public int SellerId { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LearnMVC1.DAO.DAO.Impl;
 using LearnMVC1.Models;
 using LearnMVC1.Models.EntityFramwork;
+using LearnMVC1.Global;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,10 +15,12 @@ namespace LearnMVC1.Controllers
     {
         private readonly ApplicationDbContext _db;
         AccountDAOImpl accountDAOImpl;
+        WishListController wishListController;
         public AccountController(ApplicationDbContext db)
         {
             _db = db;
             accountDAOImpl = new AccountDAOImpl(_db);
+            wishListController = new WishListController(_db);
         }
 
         [Route("/Common/Account/Register")]
@@ -97,15 +100,28 @@ namespace LearnMVC1.Controllers
                     HttpContext.Session.SetString("accountUserName", username);
                     string accountRole = accountDAOImpl.findRoleAccount(username, password);
                     HttpContext.Session.SetString("accountRole", accountRole);
+
+                    GlobalVar.AccountId = accountId;
+                    GlobalVar.AccountRole = accountRole;
+                    GlobalVar.IsLogin = true;
+                    GlobalVar.AccountUserName = username;
                 }
                 else if(accountStatus == 1)
                 {
+                    GlobalVar.AccountId = -1;
+                    GlobalVar.AccountRole = null;
+                    GlobalVar.IsLogin = false;
+                    GlobalVar.AccountUserName = null;
                     ViewData["AccountDisabled"] = true;
                 }
                 return Redirect("/Common/Product/List");
             }
             else
             {
+                GlobalVar.AccountId = -1;
+                GlobalVar.AccountRole = null;
+                GlobalVar.IsLogin = false;
+                GlobalVar.AccountUserName = null;
                 ViewData["LoginFailed"] = true;
                 return View("/Views/Common/AccountLogin.cshtml");
             }
@@ -116,6 +132,10 @@ namespace LearnMVC1.Controllers
         [Route("/Common/Account/Logout")]
         public IActionResult Logout()
         {
+            GlobalVar.AccountId = -1;
+            GlobalVar.AccountRole = null;
+            GlobalVar.IsLogin = false;
+            GlobalVar.AccountUserName = null;
             HttpContext.Session.Clear();
             return Redirect("/Common/Product/List");
         }

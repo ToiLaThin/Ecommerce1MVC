@@ -47,8 +47,15 @@ using LearnMVC1.Models.EntityFramwork;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 6 "D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\Views\_ViewImports.cshtml"
+using LearnMVC1.Global;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"b5a40b271b2a8f6f92ed271054cc78a017d0ab35", @"/Views/Common/AccountRegister.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d9880263f77038e56b6042b776472819e3e1a6f6", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"40c211fd23c49f7320d953ecf8f20810fb55c617", @"/Views/_ViewImports.cshtml")]
     public class Views_Common_AccountRegister : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("role", new global::Microsoft.AspNetCore.Html.HtmlString("form"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -105,7 +112,7 @@ using LearnMVC1.Models.EntityFramwork;
 #line hidden
 #nullable disable
             WriteLiteral("<c:url value=\"/common/register\" var=\"registerControllerUrl\"></c:url>\r\n<div class=\"container card mt-2 mb-5 p-3 border-rounded\">\r\n    <h2>Register Page</h2>\r\n    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b5a40b271b2a8f6f92ed271054cc78a017d0ab355550", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b5a40b271b2a8f6f92ed271054cc78a017d0ab355728", async() => {
                 WriteLiteral(@"
         <div class=""form-group"">
             Yourname: <input class=""form-control"" type=""text"" name=""fullname"" placeholder=""Nhập tên của bạn:""><br>
