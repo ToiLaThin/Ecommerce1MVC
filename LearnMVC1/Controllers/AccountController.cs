@@ -17,12 +17,14 @@ namespace LearnMVC1.Controllers
         AccountDAOImpl accountDAOImpl;
         WishListController wishListController;
         SellerDAOImpl sellerDAOImpl;
+        ProductDAOImpl productDAOImpl;
         public AccountController(ApplicationDbContext db)
         {
             _db = db;
             accountDAOImpl = new AccountDAOImpl(_db);
             wishListController = new WishListController(_db);
             sellerDAOImpl = new SellerDAOImpl(_db);
+            productDAOImpl = new ProductDAOImpl(_db);
         }
 
         [Route("/Common/Account/Register")]
@@ -217,6 +219,40 @@ namespace LearnMVC1.Controllers
                 return Redirect("/Common/Account/PasswordUpdate?accountId=" + accountId + "&oldPasswordMismatch=" + true);
             }
         }
+
+        #region Admin Actions
+        [Route("/Admin/Account/List")]
+        [HttpGet]
+        public IActionResult ManageProductAndAccount()
+        {
+            List<AccountModel> accounts = accountDAOImpl.findAll();
+            List<AccountModel> userAccounts = accountDAOImpl.findAllUser();
+            List<AccountModel> sellerAccounts = accountDAOImpl.findAllSeller();
+            List<ProductModel> products = productDAOImpl.findAll();
+
+            ViewData["Accounts"] = accounts;
+            ViewData["UserAccounts"] = userAccounts;
+            ViewData["SellerAccounts"] = sellerAccounts;
+            ViewData["Products"] = products;
+            return View("/Views/Admin/AccountList.cshtml");
+        }
+
+        [Route("/Admin/Account/Detail")]
+        [HttpGet]
+        public IActionResult Detail(int accountId)
+        {
+            AccountModel account = accountDAOImpl.findById(accountId);
+            ViewData["Account"] = account;
+            int sellerId = Convert.ToInt32((account.SellerId == null) ? -1 : account.SellerId);
+            if(sellerId > 0)
+            {
+                List<ProductModel> productListOfSeller = productDAOImpl.findAllBySellerId(sellerId);
+                ViewData["SellerId"] = sellerId;
+                ViewData["ProductListOfSeller"] = productListOfSeller;
+            }
+            return View("/Views/Admin/AccountDetail.cshtml");
+        }
+        #endregion
 
         #region Util Methods
         private void SetDefaultGlobalVar()

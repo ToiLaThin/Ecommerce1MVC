@@ -68,17 +68,17 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public List<AccountModel> findAll()
         {
-            throw new NotImplementedException();
+            return _db.Accounts.ToList();
         }
 
         public List<AccountModel> findAllSeller()
         {
-            throw new NotImplementedException();
+            return _db.Accounts.Where(acc => acc.SellerId != null && acc.RoleId == 3).ToList();
         }
 
         public List<AccountModel> findAllUser()
         {
-            throw new NotImplementedException();
+            return _db.Accounts.Where(acc => acc.SellerId == null && acc.RoleId == 2).ToList();
         }
 
         public AccountModel findById(int id)
