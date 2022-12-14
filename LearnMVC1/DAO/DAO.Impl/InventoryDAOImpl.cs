@@ -1,4 +1,5 @@
 ﻿using LearnMVC1.Models.EntityFramwork;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,22 +16,28 @@ namespace LearnMVC1.DAO.DAO.Impl
         }
         public void deleteInventory(int productId, int storeId)
         {
-            throw new NotImplementedException();
+            int inventoryDeletedCount = _db.Database.ExecuteSqlInterpolated($"Delete From Inventory Where id_Inventory_Store = {storeId} And id_Inventory_Product = {productId}");
+            if (inventoryDeletedCount == 1)
+                Console.WriteLine("Inventory Deleted Success");
         }
 
         public int findAmount(int productId)
         {
-            throw new NotImplementedException();
+            return _db.Inventories.Where(i => i.ProductId == productId).Select(i => i.InventoryProductAmount).First();
         }
 
         public void insertInventory(int productId, int storeId, int amount)
         {
-            throw new NotImplementedException();
+            int inventoryInsertedCount = _db.Database.ExecuteSqlInterpolated($"Insert Into Inventory(id_Inventory_Store,id_Inventory_Product,inventoryProductAmount) Values({storeId},{productId},{amount})");
+            if (inventoryInsertedCount == 1)
+                Console.WriteLine("Inventory Inserted Success");
         }
 
         public void updateInventory(int productId, int amount)
         {
-            throw new NotImplementedException();
+            int inventoryUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Update Inventory Set inventoryProductAmount = {amount} Where id_Inventory_Product = {productId}");
+            if (inventoryUpdatedCount == 1)
+                Console.WriteLine("Inventory Updated Success");
         }
     }
 }

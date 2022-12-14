@@ -26,7 +26,9 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void becomeSeller(int sellerId, string username)
         {
-            throw new NotImplementedException();
+            int accountUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Update Account Set id_Account_Seller = {sellerId},id_Account_Role = 3 Where accountUserName = {username}");
+            if (accountUpdatedCount == 1)
+                Console.WriteLine("Account became seller Success");
         }
 
         public void changePassword(int accountId, string password)
@@ -104,7 +106,8 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public int findSellerId(string username)
         {
-            throw new NotImplementedException();
+            var sellerId = _db.Accounts.Where(acc => acc.AccountUserName == username).Select(acc => acc.SellerId).First();
+            return (sellerId == null || sellerId == 0) ? -1 : Convert.ToInt32(sellerId);
         }
 
         public void registerAccount(string username, string password)

@@ -16,6 +16,8 @@ namespace LearnMVC1.Models
 
         [Column("storeName")]
         [Required]
+        //phaỉ unique để có thể findStoreId qua storeName
+        //chưa chỉnh trong file migration => To Do
         public string StoreName { get; set; }
 
         [Column("storeCreateDate")]

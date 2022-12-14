@@ -23,7 +23,9 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void editProduct(ProductModel product)
         {
-            throw new NotImplementedException();
+            int producUpdatedCount = _db.Database.ExecuteSqlRaw("Update Product Set productName='" + product.ProductName + "', productDescription='" + product.ProductDescription + "', productPrice=" + product.ProductPrice + ", productImage='" + product.ProductImage + "', productModifiedDate='" + product.ProductModifiedDate + "', productStatus=" + product.ProductStatus + ", id_Product_Category=" + product.CategoryId + ", productRevenue=" + product.ProductRevenue + " Where productId=" + product.ProductId);
+            if (producUpdatedCount == 1)
+                Console.WriteLine("Product Updated Success");
         }
 
         public ProductModel find(int productId)
@@ -38,7 +40,7 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public List<ProductModel> findAllBySellerId(int sellerId)
         {
-            throw new NotImplementedException();
+            return _db.Products.Where(p => p.SellerId == sellerId).ToList();
         }
 
         public List<ProductModel> findByCategory(int categoryId)
@@ -54,12 +56,14 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public int findProductId(ProductModel product)
         {
-            throw new NotImplementedException();
+            return _db.Products.Where(p => p.ProductName == product.ProductName && p.ProductDescription == p.ProductDescription && p.ProductPrice == product.ProductPrice && p.ProductImage == product.ProductImage && p.ProductModifiedDate == product.ProductModifiedDate && p.SellerId == product.SellerId).Select(p => p.ProductId).First();
         }
 
         public void insertProduct(ProductModel product)
         {
-            throw new NotImplementedException();
+            int producInsertedCount = _db.Database.ExecuteSqlInterpolated($"Insert Into Product(productName,productDescription,productPrice,productImage,productModifiedDate,id_Product_Seller,productStatus,id_Product_Category,productRevenue) Values({product.ProductName},{product.ProductDescription},{product.ProductPrice},{product.ProductImage},{product.ProductModifiedDate},{product.SellerId},0,{product.CategoryId},0)");
+            if (producInsertedCount == 1)
+                Console.WriteLine("Product Inserted Success");
         }
 
         public List<ProductModel> loadInitNine(string orderBy)

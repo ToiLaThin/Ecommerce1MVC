@@ -1,4 +1,11 @@
 ﻿@{  
+    //code như thế này sẽ ít nguy hiểm hơn foreach trực tiếp trên ViewData vì nó có thể null
+    List<ProductModel> products = new List<ProductModel>();
+    List<CategoryModel> categories = new List<CategoryModel>();
+    if (ViewData.ContainsKey("Products"))
+        products = (List<ProductModel>)ViewData["Products"];
+    if (ViewData.ContainsKey("Categories"))
+        categories = (List<CategoryModel>)ViewData["Categories"];
 }
 @model List<ProductModel>
 <!-- Shop Start -->
@@ -16,7 +23,7 @@
                     </span>
                 </h5>
                 <div class="collapse" id="collapseExample">
-                    @foreach (var category in (List<CategoryModel>)ViewData["Categories"])
+                    @foreach (var category in categories)
                     {
                         <div class="custom-control d-flex align-items-center justify-content-between mb-3">
                             <label class="custom-control-label">
@@ -177,7 +184,7 @@
                 </div>
             </div>
             <div class="row" id="products">
-                @foreach (var p in (List<ProductModel>)ViewData["Products"])
+                @foreach (var p in products)
                 {
                     if (p.ProductStatus == 0)
                     {
@@ -224,7 +231,7 @@
                                         </a>
                                     }
                                     
-                                    <a href="<%=request.getContextPath() %>/common/cart?productId=@p.ProductId&action=addToCart"
+                                    <a href="/Common/Cart/Add?productId=@p.ProductId"
                                        class="btn btn-sm text-dark p-0">
                                         <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
                                     </a>
@@ -232,7 +239,7 @@
                                 <div class="card-footer d-flex justify-content-between bg-light border">
                                     @if(GlobalVar.IsLogin)
                                     {
-                                        <a href="<%=request.getContextPath() %>/common/buyNow?productId=@p.ProductId"
+                                        <a href="/Common/buyNow?productId=@p.ProductId"
                                            class="btn btn-block text-dark p-0">
                                             <i class="fas fa-shopping-cart text-primary mr-1"></i>Buy now
                                         </a>

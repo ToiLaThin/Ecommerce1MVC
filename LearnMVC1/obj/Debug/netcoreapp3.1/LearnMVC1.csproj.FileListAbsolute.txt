@@ -388,3 +388,7 @@ D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Vie
 D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\Common\ProductFilterByCategory.cshtml.g.cs
 D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\Common\WishList.cshtml.g.cs
 D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\Common\Cart.cshtml.g.cs
+D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\User\SellerRegister.cshtml.g.cs
+D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\Seller\ProductList.cshtml.g.cs
+D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\Seller\ProductInsert.cshtml.g.cs
+D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Debug\netcoreapp3.1\Razor\Views\Seller\ProductUpdate.cshtml.g.cs

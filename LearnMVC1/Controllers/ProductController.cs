@@ -3,6 +3,7 @@ using LearnMVC1.Models;
 using LearnMVC1.Models.EntityFramwork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace LearnMVC1.Controllers
         WishListDAOImpl wishListDAOImpl;
         AccountDAOImpl accountDAOImpl;
         ReviewDAOImpl reviewDAOImpl;
+        InventoryDAOImpl inventoryDAOImpl;
 
         public ProductController(ApplicationDbContext db)
         {
@@ -27,6 +29,7 @@ namespace LearnMVC1.Controllers
             accountDAOImpl = new AccountDAOImpl(_db);
             wishListDAOImpl = new WishListDAOImpl(_db);
             reviewDAOImpl = new ReviewDAOImpl(_db);
+            inventoryDAOImpl = new InventoryDAOImpl(_db);
         }
 
         [Route("/Common/Product/List")]
@@ -60,8 +63,31 @@ namespace LearnMVC1.Controllers
             var product = productDAOImpl.find(productId);
             int allReviewsCount = reviewDAOImpl.loadAllByProduct(productId).Count;
             List<ReviewModel> reviews = reviewDAOImpl.loadInitTenByProduct(productId);
-            string username = HttpContext.Session.GetString("accountUserName");
 
+            int productAmountInInventory = inventoryDAOImpl.findAmount(productId);
+            if (productAmountInInventory == -1)
+                productAmountInInventory = 0;
+
+            List<CartItemModel> cart = null;
+            string sessionCart = HttpContext.Session.GetString("cart");
+            if (sessionCart != null)
+                cart = JsonConvert.DeserializeObject<List<CartItemModel>>(sessionCart);
+
+            int productQuantityInCart;
+            if (cart != null)
+            {
+                int productIndexInCart = isInCart(productId, cart);
+                //chỉ lấy quantity ra chứa không thay đổi quantity product trong cart
+                if (productIndexInCart == -1)
+                    productQuantityInCart = 0;
+                else
+                    productQuantityInCart = cart[productIndexInCart].CartItemQuantity;
+            }
+            else
+                productQuantityInCart = 0;
+
+
+            string username = HttpContext.Session.GetString("accountUserName");
             if (username != null)
             {
                 int accountId = accountDAOImpl.findAccountId(username);
@@ -69,6 +95,8 @@ namespace LearnMVC1.Controllers
                 string accountImage = accountDAOImpl.findById(accountDAOImpl.findAccountId(username)).AccountImage;
                 ViewData["AccountImage"] = accountImage;
             }
+            ViewData["ProductAmountInInventory"] = productAmountInInventory;
+            ViewData["ProductQuantityInCart"] = productQuantityInCart;
             ViewData["Product"] = product;
             ViewData["Reviews"] = reviews;
             ViewData["ReviewsCount"] = allReviewsCount;
@@ -126,5 +154,129 @@ namespace LearnMVC1.Controllers
             ViewData["CategoryName"] = categoryName;
             return View("Views/Common/ProductFilterByCategory.cshtml",productsOfCategory);
         }
+
+
+        #region Seller 's product controller
+
+        [Route("/Seller/Product/List")]
+        [HttpGet]
+        public IActionResult ListOfShop(int categoryId, string categoryName)
+        {            
+            int sellerId = Global.GlobalVar.SellerId;
+            List<ProductModel> productListOfSeller = productDAOImpl.findAllBySellerId(sellerId);
+            ViewData["ProductListOfSeller"] = productListOfSeller;
+            List<CategoryModel> categories = categoryDAOImpl.findAll();
+            ViewData["Categories"] = categories;
+            return View("/Views/Seller/ProductList.cshtml");
+        }
+
+        [Route("/Seller/Product/Insert")]
+        [HttpGet]
+        public IActionResult InsertGet()
+        {
+            List<CategoryModel> categories = categoryDAOImpl.findAll();
+            ViewData["Categories"] = categories;
+            return View("/Views/Seller/ProductInsert.cshtml");
+        }
+
+        [Route("/Seller/Product/Insert")]
+        [HttpPost]
+        public IActionResult InsertPost()
+        {
+            bool isValidated = false;
+            ProductModel product = new ProductModel();
+            try {
+                product.ProductName = HttpContext.Request.Form["productName"].ToString();
+                product.ProductDescription = HttpContext.Request.Form["productDescription"];
+                product.ProductPrice = Convert.ToDecimal(HttpContext.Request.Form["productPrice"]);
+                product.ProductImage = HttpContext.Request.Form["productImage"].ToString();
+                product.ProductModifiedDate = DateTime.Now.ToLocalTime();
+                product.SellerId = Global.GlobalVar.SellerId;
+                product.CategoryId = Convert.ToInt32(HttpContext.Request.Form["categoryId"]);
+                productDAOImpl.insertProduct(product);
+
+                int productInsertedId = productDAOImpl.findProductId(product);
+                int stock = Convert.ToInt32(HttpContext.Request.Form["productStock"]);
+                int storeId = Global.GlobalVar.StoreId;
+
+                inventoryDAOImpl.insertInventory(productInsertedId, storeId, stock);
+                isValidated = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                isValidated = false;
+            }
+            if (isValidated)
+                return Redirect("/Seller/Product/List");
+            else
+                //vẫn đúng là get
+                return Redirect("/Seller/Product/Insert");
+        }
+
+
+        [Route("/Seller/Product/Update")]
+        [HttpGet]
+        public IActionResult UpdateGet(int productId)
+        {
+            ProductModel product = new ProductModel();
+            product = productDAOImpl.find(productId);
+
+            List<CategoryModel> categories = categoryDAOImpl.findAll();
+            int productStock = inventoryDAOImpl.findAmount(productId);
+            ViewData["ProductStock"] = productStock;
+            ViewData["Product"] = product;
+            ViewData["Categories"] = categories;
+            return View("/Views/Seller/ProductUpdate.cshtml");
+        }
+
+        [Route("/Seller/Product/Update")]
+        [HttpPost]
+        public IActionResult UpdatePost()
+        {
+            bool isValidated = false;
+            ProductModel product = new ProductModel();
+            try
+            {
+                int productId = Convert.ToInt32(HttpContext.Request.Form["productId"]);
+                product.ProductId = productId;
+                product.ProductName = HttpContext.Request.Form["productName"];
+                product.ProductDescription = HttpContext.Request.Form["productDescription"];
+                product.ProductPrice = Convert.ToDecimal(HttpContext.Request.Form["productPrice"]);
+                product.ProductImage = HttpContext.Request.Form["productImage"];
+                product.ProductStatus = Convert.ToInt32(HttpContext.Request.Form["productStatus"]);
+                product.ProductModifiedDate = DateTime.Now.ToLocalTime();
+                product.SellerId = Global.GlobalVar.SellerId;
+                product.CategoryId = Convert.ToInt32(HttpContext.Request.Form["categoryId"]);
+                productDAOImpl.editProduct(product);
+
+                int newProductStock = Convert.ToInt32(HttpContext.Request.Form["productStock"]);
+                inventoryDAOImpl.updateInventory(productId, newProductStock);
+                isValidated = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                isValidated = false;
+            }
+            if (isValidated)
+                return Redirect("/Seller/Product/List");
+            else
+                return View("/Views/Seller/ProductInsert.cshtml");
+        }
+
+        #endregion
+
+        #region Util Methods
+        private int isInCart(int productId, List<CartItemModel> cart)
+        {
+            for (int i = 0; i < cart.Count; i++)
+            {
+                if (cart[i].CartItemProduct.ProductId == productId)
+                    return i;
+            }
+            return -1;
+        }
+        #endregion
     }
 }

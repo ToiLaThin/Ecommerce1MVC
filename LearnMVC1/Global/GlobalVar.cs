@@ -12,6 +12,8 @@ namespace LearnMVC1.Global
         public static string AccountRole;
         public static string AccountUserName;
         public static int AccountId;
+        public static int SellerId = -1;
+        public static int StoreId = -1;
         public static bool IsLogin;
     }
 }

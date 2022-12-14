@@ -16,11 +16,13 @@ namespace LearnMVC1.Controllers
         private readonly ApplicationDbContext _db;
         AccountDAOImpl accountDAOImpl;
         WishListController wishListController;
+        SellerDAOImpl sellerDAOImpl;
         public AccountController(ApplicationDbContext db)
         {
             _db = db;
             accountDAOImpl = new AccountDAOImpl(_db);
             wishListController = new WishListController(_db);
+            sellerDAOImpl = new SellerDAOImpl(_db);
         }
 
         [Route("/Common/Account/Register")]
@@ -100,7 +102,15 @@ namespace LearnMVC1.Controllers
                     HttpContext.Session.SetString("accountUserName", username);
                     string accountRole = accountDAOImpl.findRoleAccount(username, password);
                     HttpContext.Session.SetString("accountRole", accountRole);
-
+                    if (accountRole.Equals("Seller"))
+                    {
+                        //nếu user role là seller session đưa sellerId vào
+                        int sellerId = accountDAOImpl.findSellerId(username);
+                        GlobalVar.SellerId = sellerId;
+                        GlobalVar.StoreId = sellerDAOImpl.findStoreId(sellerId);
+                        HttpContext.Session.SetString("sellerId", GlobalVar.SellerId.ToString());
+                        HttpContext.Session.SetString("storeId", GlobalVar.StoreId.ToString());
+                    }
                     GlobalVar.AccountId = accountId;
                     GlobalVar.AccountRole = accountRole;
                     GlobalVar.IsLogin = true;
@@ -108,20 +118,14 @@ namespace LearnMVC1.Controllers
                 }
                 else if(accountStatus == 1)
                 {
-                    GlobalVar.AccountId = -1;
-                    GlobalVar.AccountRole = null;
-                    GlobalVar.IsLogin = false;
-                    GlobalVar.AccountUserName = null;
+                    SetDefaultGlobalVar();
                     ViewData["AccountDisabled"] = true;
                 }
                 return Redirect("/Common/Product/List");
             }
             else
             {
-                GlobalVar.AccountId = -1;
-                GlobalVar.AccountRole = null;
-                GlobalVar.IsLogin = false;
-                GlobalVar.AccountUserName = null;
+                SetDefaultGlobalVar();
                 ViewData["LoginFailed"] = true;
                 return View("/Views/Common/AccountLogin.cshtml");
             }
@@ -132,10 +136,7 @@ namespace LearnMVC1.Controllers
         [Route("/Common/Account/Logout")]
         public IActionResult Logout()
         {
-            GlobalVar.AccountId = -1;
-            GlobalVar.AccountRole = null;
-            GlobalVar.IsLogin = false;
-            GlobalVar.AccountUserName = null;
+            SetDefaultGlobalVar();
             HttpContext.Session.Clear();
             return Redirect("/Common/Product/List");
         }
@@ -216,5 +217,17 @@ namespace LearnMVC1.Controllers
                 return Redirect("/Common/Account/PasswordUpdate?accountId=" + accountId + "&oldPasswordMismatch=" + true);
             }
         }
+
+        #region Util Methods
+        private void SetDefaultGlobalVar()
+        {
+            GlobalVar.SellerId = -1;
+            GlobalVar.StoreId = -1;
+            GlobalVar.AccountId = -1;
+            GlobalVar.AccountRole = null;
+            GlobalVar.IsLogin = false;
+            GlobalVar.AccountUserName = null;
+        }
+        #endregion
     }
 }

@@ -2,7 +2,7 @@
 @{
     List<CartItemModel> cart = JsonConvert.DeserializeObject<List<CartItemModel>>(Context.Session.GetString("cart"));
 }
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 @if(cart == null)
 {
     <!-- 404 Start -->
@@ -64,17 +64,7 @@ else if(cart != null && cart.Count > 0){
                                     <td class="align-middle">@cartItem.CartItemProduct.ProductPrice €</td>
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
-                                            <!-- <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-primary btn-minus" >
-                                                <i class="fa fa-minus"></i>
-                                                </button>
-                                            </div> -->
                                             <input type="text" class="form-control form-control-sm bg-secondary text-center" value="@cartItem.CartItemQuantity">
-                                            <!-- <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-primary btn-plus">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div> -->
                                         </div>
                                     </td>
                                     <td class="align-middle">@(cartItem.CartItemUnitPrice * cartItem.CartItemQuantity)</td>
@@ -102,7 +92,7 @@ else if(cart != null && cart.Count > 0){
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium"><%=totalPrice %></h6>
+                            <h6 class="font-weight-medium">@totalPrice</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
@@ -112,25 +102,16 @@ else if(cart != null && cart.Count > 0){
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold"><%=totalPrice+6.90 %> €</h5>
+                            <h5 class="font-weight-bold">@(totalPrice + Convert.ToDecimal(6.90)) €</h5>
                         </div>
-                        <c:if test="${isLogin != null }">
-                            <c:set var="isLogin" value="false" />
-                            <c:set var="username" value='${session.getAttribute("username") }' />
-                        </c:if>
-                        <c:if test="${username != null }">
-                            <c:set var="isLogin" value="true" />
-                        </c:if>
-                        <c:if test="${username == null }">
-                            <c:set var="isLogin" value="false" />
-                        </c:if>
-                        <c:if test="${isLogin == true }">
-                            <a class="btn btn-block btn-primary my-3 py-3" href='<%=request.getContextPath() %>/common/order'>Order</a>
-                        </c:if>
-                        <c:if test="${isLogin == false }">
-                            <a class="btn btn-block btn-primary my-3 py-3" href='<%=request.getContextPath() %>/views/common/login.jsp'>Order</a>
-                        </c:if>
-                        <a class="btn btn-block btn-light  my-3 py-3" href="<%=request.getContextPath() %>/common/home">Continue Shopping</a>
+                       @if(GlobalVar.IsLogin)
+                        {
+                            <a class="btn btn-block btn-primary my-3 py-3" href='/Common/Order/Order'>Order</a>
+                        }
+                       else{
+                            <a class="btn btn-block btn-primary my-3 py-3" href='/Common/Account/Login'>Order</a>
+                       }
+                        <a class="btn btn-block btn-light  my-3 py-3" href="/Common/Product/List">Continue Shopping</a>
                     </div>
                 </div>
             </div>
@@ -147,8 +128,7 @@ else if(cart != null && cart.Count > 0){
 
         if (outOfProduct === true) {
             alert("Không còn hàng trong kho");
-            let root = "${pageContext.request.contextPath}"
-            window.location.href = root + "/common/home";
+            window.location.href = "/common/home";
         }
     }
 </script>

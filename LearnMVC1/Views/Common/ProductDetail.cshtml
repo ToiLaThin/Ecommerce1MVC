@@ -1,5 +1,7 @@
 ﻿@inject ApplicationDbContext Db
 @{
+    int productAmountInInventory = (int)ViewData["ProductAmountInInventory"];
+    int productQuantityInCart = (int)ViewData["ProductQuantityInCart"];
     var product = (ProductModel)ViewData["Product"];
     var reviews = (List<ReviewModel>)ViewData["Reviews"];
     int reviewsCount = (int)ViewData["ReviewsCount"];
@@ -55,12 +57,14 @@
         </div>
 
         <div class="col-lg-7 pb-5">
-            <input id="productId" type="hidden" value="@product.ProductId"/>
+            <input id="productId" type="hidden" value="@product.ProductId" />
             <h3 class="font-weight-semi-bold">@product.ProductName</h3>
-            @if(GlobalVar.IsLogin){
-                if(GlobalVar.AccountRole.Equals("Admin")){
+            @if (GlobalVar.IsLogin)
+            {
+                if (GlobalVar.AccountRole.Equals("Admin"))
+                {
                     <small class="mb-4 text-muted">Created On: @product.ProductModifiedDate </small>
-                }    
+                }
             }
             <div class="d-flex mb-3">
                 <div class="text-primary mr-2">
@@ -150,20 +154,19 @@
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group mr-3" style="width: 130px;">
                         <div class="input-group-btn">
-                            <button class="btn btn-danger" onclick="func_SubtractProductQuantityByOne()">
+                            <button id="mySubtractBtn" class="btn btn-danger">
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input id="quantity" type="text" class="form-control bg-secondary text-center" name="quantity" min="0" max="${productAmountInInventory }"
-                               value="${productQuantityInCart }">
+                        <input id="quantity" type="text" class="form-control bg-secondary text-center" name="quantity" min="0" max="@productAmountInInventory"
+                               value="@productQuantityInCart">
                         <div class="input-group-btn">
-                            <button class="btn btn-success" onclick="func_AddProductQuantityByOne()">
+                            <button id="myAddBtn" class="btn btn-success">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-primary px-3 text-uppercase" id="updateProductQuantityBtn"
-                            onclick="func_changeProductQuantityInCart()">
+                    <button class="btn btn-primary px-3 text-uppercase" id="updateProductQuantityBtn">
                         <i class="fa fa-shopping-cart mr-1"></i> Update To Cart
                     </button>
                 </div>
@@ -299,10 +302,10 @@
                     <div class="row">
                         <div class="col-md-6" id="reviews">
                             <h4 class="mb-4">@reviewsCount review for @product.ProductName</h4>
-                            @foreach(var review in reviews)
+                            @foreach (var review in reviews)
                             {
                                 <div class="media mb-4 review">
-                                    @if(review.ReviewAccount.AccountImage == null)
+                                    @if (review.ReviewAccount.AccountImage == null)
                                     {
                                         <img src="~/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;height: 50px;">
 
@@ -352,7 +355,7 @@
                                 </div>
                                 <form method="post" action="/Common/Review/Insert" id="myReviewCreate">
                                     <div class="form-group">
-                                        @if(accountImage == null)
+                                        @if (accountImage == null)
                                         {
                                             <img src="~/img/user.jpg" class="rounded-circle border-1 border-dark" width="75" height="75" />
                                         }
@@ -382,6 +385,45 @@
 <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 @section Scripts {
     <script>
+        let maxQuantityInt = parseInt(document.getElementById("quantity").max, 10);
+        let minQuantityInt = parseInt(document.getElementById("quantity").min, 10);
+        const func_AddProductQuantityByOne = function () {
+            const element = document.getElementById("quantity");
+            let quantityString = element.value;
+            let quantityInt = parseInt(quantityString, 10) + 1;
+            if (quantityInt > maxQuantityInt) {
+                alert("Hết hàng")
+            } else {
+                element.value = quantityInt;
+            }
+        }
+        const func_SubtractProductQuantityByOne = function () {
+            const element = document.getElementById("quantity");
+            let quantityString = element.value;
+            let quantityInt = parseInt(quantityString, 10) - 1;
+            if (quantityInt < minQuantityInt) {
+                alert("Số lượng không hợp lệ");
+            } else {
+                element.value = quantityInt;
+            }
+        }
+
+        const func_ChangeProductQuantityInCart = function () {
+            var changedProductQuantityInCart = parseInt(document.getElementById("quantity").value);
+            if (changedProductQuantityInCart > 0) {
+                var pId = parseInt($("#productId").val());
+                //sử dụng parseInt convert từ string -> number nhưng action sẽ tự convert từ string sang int
+                window.location.href = "/Common/Cart/Update?productId=" + pId
+                    + "&productQuantity=" + changedProductQuantityInCart;
+            } else {
+                alert("Chưa mua hàng");
+            }
+        }
+        $("#mySubtractBtn").on('click', func_SubtractProductQuantityByOne)
+        $("#myAddBtn").on('click', func_AddProductQuantityByOne)
+        $('#updateProductQuantityBtn').on('click', func_ChangeProductQuantityInCart)
+    </script>
+    <script>
         $(window).scroll(
             function () {
                 if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
@@ -406,45 +448,6 @@
                 error: function (xhr) {
                 }
             });
-        };
-    </script>
-    <script>
-        let maxQuantityInt = parseInt(document.getElementById("quantity").max, 10);
-        let minQuantityInt = parseInt(document.getElementById("quantity").min, 10);
-        const func_AddProductQuantityByOne = function () {
-            const element = document.getElementById("quantity");
-            let quantityString = element.value;
-            let quantityInt = parseInt(quantityString, 10) + 1;
-            if (quantityInt > maxQuantityInt) {
-                alert("Hết hàng")
-            } else {
-                element.value = quantityInt;
-            }
-        }
-        const func_SubtractProductQuantityByOne = function () {
-            const element = document.getElementById("quantity");
-            let quantityString = element.value;
-            let quantityInt = parseInt(quantityString, 10) - 1;
-            if (quantityInt < minQuantityInt) {
-                alert("Số lượng không hợp lệ");
-            } else {
-                element.value = quantityInt;
-            }
-        }
-
-        const func_changeProductQuantityInCart = function () {
-            var changedProductQuantityInCart = document
-                .getElementById("quantity").value;
-            if (changedProductQuantityInCart > 0) {
-                var pId = ${ product.productId };
-                console.log("Hello");
-                var root = "${pageContext.request.contextPath}"
-                window.location.href = root + "/common/cart?productId=" + pId
-                    + "&action=updateToCart&productQuantity="
-                    + changedProductQuantityInCart;
-            } else {
-                alert("Chưa mua hàng");
-            }
         };
     </script>
     <!-- JavaScript Libraries -->
