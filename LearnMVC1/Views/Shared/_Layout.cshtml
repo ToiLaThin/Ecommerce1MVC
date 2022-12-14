@@ -29,7 +29,7 @@
     CategoryDAOImpl categoryDAOImpl = new CategoryDAOImpl(Db);
     WishListDAOImpl wishListDAOImpl = new WishListDAOImpl(Db);
     GlobalVar.WishListSize = wishListDAOImpl.findAllProductId(GlobalVar.AccountId).Count;
-    GlobalVar.CartSize = JsonConvert.DeserializeObject<List<CartItemModel>>(Context.Session.GetString("cart")).Count;
+    GlobalVar.CartSize = (Context.Session.GetString("cart") == null) ? 0 : JsonConvert.DeserializeObject<List<CartItemModel>>(Context.Session.GetString("cart")).Count;
 
 }
 <body>
