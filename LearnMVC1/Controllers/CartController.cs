@@ -74,7 +74,6 @@ namespace LearnMVC1.Controllers
 				}
 			}
 			HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
-			GlobalVar.CartSize = cart.Count;
 			return View("/Views/Common/Cart.cshtml");
 		}
 
@@ -101,7 +100,6 @@ namespace LearnMVC1.Controllers
 					cart[productIndexInCart].CartItemQuantity = productQuantity;
 			}
 			HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
-			GlobalVar.CartSize = cart.Count;
 			return View("/Views/Common/Cart.cshtml");
 		}
 
@@ -115,7 +113,6 @@ namespace LearnMVC1.Controllers
 			if(productIndexInCart != -1)
 				cart.RemoveAt(productIndexInCart);
 			HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
-			GlobalVar.CartSize = cart.Count;
 			return View("/Views/Common/Cart.cshtml");
 		}
 
@@ -127,7 +124,6 @@ namespace LearnMVC1.Controllers
 			string sessionCart = HttpContext.Session.GetString("cart");
 			if(sessionCart != null)
 				cart = JsonConvert.DeserializeObject<List<CartItemModel>>(sessionCart);
-			GlobalVar.CartSize = cart.Count;
 			HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
 			return View("/Views/Common/Cart.cshtml");
 		}

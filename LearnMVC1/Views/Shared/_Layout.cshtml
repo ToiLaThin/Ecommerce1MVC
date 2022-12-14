@@ -24,12 +24,12 @@
     @RenderSection("CSS", required: false)
 </head>
 @inject ApplicationDbContext Db
+@using Newtonsoft.Json;
 @{
-    AccountDAOImpl accountDAOImpl = new AccountDAOImpl(Db);
     CategoryDAOImpl categoryDAOImpl = new CategoryDAOImpl(Db);
     WishListDAOImpl wishListDAOImpl = new WishListDAOImpl(Db);
     GlobalVar.WishListSize = wishListDAOImpl.findAllProductId(GlobalVar.AccountId).Count;
-
+    GlobalVar.CartSize = JsonConvert.DeserializeObject<List<CartItemModel>>(Context.Session.GetString("cart")).Count;
 
 }
 <body>
@@ -86,16 +86,16 @@
                 </div>
 
                 <div class="col-lg-3 col-6 text-right">
-                @{
-                    <a href="/Common/WishList/List?accountId=@GlobalVar.AccountId" class="btn border">
-                        <i class="fas fa-heart text-primary"></i>
-                        <span class="badge">@GlobalVar.WishListSize</span>
-                    </a>
-                    <a href="/Common/Cart/List" class="btn border">
-                        <i class="fas fa-shopping-cart text-primary"></i>
-                        <span class="badge">@GlobalVar.CartSize</span>
-                    </a>
-                }
+                    @{
+                        <a href="/Common/WishList/List?accountId=@GlobalVar.AccountId" class="btn border">
+                            <i class="fas fa-heart text-primary"></i>
+                            <span class="badge">@GlobalVar.WishListSize</span>
+                        </a>
+                        <a href="/Common/Cart/List" class="btn border">
+                            <i class="fas fa-shopping-cart text-primary"></i>
+                            <span class="badge">@GlobalVar.CartSize</span>
+                        </a>
+                    }
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@
                     </a>
                     <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
                         <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                            @{ 
+                            @{
                                 List<CategoryModel> categories = categoryDAOImpl.findAll();
                                 foreach (CategoryModel category in categories)
                                 {
@@ -133,11 +133,11 @@
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
                                 <a class="nav-item nav-link" href="<%=request.getContextPath() %>/common/home">Home <span class="sr-only">(current)</span></a>
-                                @if(GlobalVar.AccountRole != null)
+                                @if (GlobalVar.AccountRole != null)
                                 {
-                                    if(GlobalVar.AccountRole.Equals("Admin"))
+                                    if (GlobalVar.AccountRole.Equals("Admin"))
                                     {
-                                       <a class="nav-item nav-link" href="<%=request.getContextPath() %>/admin/category/list">Categories</a>
+                                        <a class="nav-item nav-link" href="<%=request.getContextPath() %>/admin/category/list">Categories</a>
                                     }
                                 }
                                 <a href="/Common/Cart/List" class="nav-item nav-link">Cart</a>
@@ -150,55 +150,55 @@
                                 </div>
                             </div>
                             <div class="navbar-nav ml-auto py-0">
-                                @if(GlobalVar.AccountRole != null && GlobalVar.AccountUserName != null)
+                                @if (GlobalVar.AccountRole != null && GlobalVar.AccountUserName != null)
                                 {
                                     <div class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown"
-                                       role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                       href="<%=request.getContextPath()%>/user/cart">
-                                        <i class="fa fa-user"></i> @GlobalVar.AccountRole @GlobalVar.AccountUserName
-                                    </a>
-                                    <ul class="dropdown-menu"
-                                        aria-labelledby="navbarScrollingDropdown">
-                                        @if (GlobalVar.AccountRole.Equals("Admin"))
-                                        {
-                                            <a class="dropdown-item" href="<%=request.getContextPath()%>/admin/cart/list">
-                                                Order management
-                                            </a>
-                                            <a class="dropdown-item" href="<%=request.getContextPath()%>/admin/UAPManage">
-                                                User and Product Management
-                                            </a>
-                                        }
-                                        @if (GlobalVar.AccountRole.Equals("User"))
-                                        {
-                                            <a class="dropdown-item" href="<%=request.getContextPath()%>/views/user/registerSeller.jsp">
-                                                Open Shop
-                                            </a>
-                                        }
-                                        @if (GlobalVar.AccountRole.Equals("Seller"))
-                                        {
-                                            <a class="dropdown-item"
-                                                href="<%=request.getContextPath()%>/seller/home">
-                                                My Shop
-                                            </a>
-                                        }
-                                        <a class="dropdown-item"
-                                           href="<%=request.getContextPath()%>/common/receipt/list">
-                                            Orders
-                                            and receipts
+                                        <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown"
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                           href="<%=request.getContextPath()%>/user/cart">
+                                            <i class="fa fa-user"></i> @GlobalVar.AccountRole @GlobalVar.AccountUserName
                                         </a>
-                                        <li><hr class='dropdown-divider'></li>
+                                        <ul class="dropdown-menu"
+                                            aria-labelledby="navbarScrollingDropdown">
+                                            @if (GlobalVar.AccountRole.Equals("Admin"))
+                                            {
+                                                <a class="dropdown-item" href="<%=request.getContextPath()%>/admin/cart/list">
+                                                    Order management
+                                                </a>
+                                                <a class="dropdown-item" href="<%=request.getContextPath()%>/admin/UAPManage">
+                                                    User and Product Management
+                                                </a>
+                                            }
+                                            @if (GlobalVar.AccountRole.Equals("User"))
+                                            {
+                                                <a class="dropdown-item" href="<%=request.getContextPath()%>/views/user/registerSeller.jsp">
+                                                    Open Shop
+                                                </a>
+                                            }
+                                            @if (GlobalVar.AccountRole.Equals("Seller"))
+                                            {
+                                                <a class="dropdown-item"
+                                                   href="<%=request.getContextPath()%>/seller/home">
+                                                    My Shop
+                                                </a>
+                                            }
+                                            <a class="dropdown-item"
+                                               href="<%=request.getContextPath()%>/common/receipt/list">
+                                                Orders
+                                                and receipts
+                                            </a>
+                                            <li><hr class='dropdown-divider'></li>
 
-                                        <a href="/Common/Account/Logout" class='dropdown-item'>Logout</a>
-                                        <a href="/Common/Account/Register" class='dropdown-item'>Register</a>
-                                        <a href="/Common/Account/PasswordUpdate?accountId=@GlobalVar.AccountId" class='dropdown-item'>Change password</a>
-                                        <a href="/Common/Account/ProfileUpdate?accountId=@GlobalVar.AccountId" class='dropdown-item'>Profile</a>
-                                        <a href="" class='dropdown-item'>Wishlist</a>
+                                            <a href="/Common/Account/Logout" class='dropdown-item'>Logout</a>
+                                            <a href="/Common/Account/Register" class='dropdown-item'>Register</a>
+                                            <a href="/Common/Account/PasswordUpdate?accountId=@GlobalVar.AccountId" class='dropdown-item'>Change password</a>
+                                            <a href="/Common/Account/ProfileUpdate?accountId=@GlobalVar.AccountId" class='dropdown-item'>Profile</a>
+                                            <a href="" class='dropdown-item'>Wishlist</a>
 
-                                    </ul>
-                                </div>
+                                        </ul>
+                                    </div>
                                 }
-                                else if(GlobalVar.AccountRole == null && GlobalVar.AccountUserName == null)
+                                else if (GlobalVar.AccountRole == null && GlobalVar.AccountUserName == null)
                                 {
                                     <div class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle"
