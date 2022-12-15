@@ -71,7 +71,7 @@
                         <div class="card-footer d-flex justify-content-between bg-light border">        
                             @if(GlobalVar.IsLogin)
                             {
-                                <a href="<%=request.getContextPath() %>/common/buyNow?productId=@product.ProductId" class="btn btn-block text-dark p-0">
+                                <a href="/Common/Product/BuyNow?productId=@product.ProductId" class="btn btn-block text-dark p-0">
                                     <i class="fas fa-shopping-cart text-primary mr-1"></i>Buy now
                                 </a>
                             }

@@ -177,6 +177,32 @@ namespace LearnMVC1.Controllers
             ViewData["Products"] = products;
             return View("/Views/Common/ProductFilterByStore.cshtml");
         }
+
+        //tuy là thuộc controller product nhưng lại dùng cartDAO chứ ko sử dụng productDAO
+        [Route("/Common/Product/BuyNow")]
+        [HttpGet]
+        public IActionResult BuyNow(int productId)
+        {
+            List<CartItemModel> cart = new List<CartItemModel>();
+            int productAmountInInventory = inventoryDAOImpl.findAmount(productId);
+            if (productAmountInInventory > 0) //bao gồm cả khác -1
+            {
+                cart.Add(new CartItemModel(productDAOImpl.find(productId), 1));
+
+                //xóa cart cũ trong session 
+                HttpContext.Session.Remove("cart");
+                //cart mới là có duy nhất sp mua ngay số lượng là 1
+                HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
+                return Redirect("/Common/Order/Insert");
+            }
+            else
+            {
+                ViewData["OutOfProduct"] = true;
+                return Redirect("/Common/Product/List");
+            }    
+
+        }
+
         #region Seller 's product controller
 
         [Route("/Seller/Product/List")]

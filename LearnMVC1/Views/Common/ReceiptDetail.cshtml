@@ -1,0 +1,42 @@
+﻿@model List<OrderItemModel>
+@{
+    decimal finalPrice = 0;
+    DateTime? releaseDate = null;
+    if(ViewData.ContainsKey("ReceiptReleaseDate")){
+        releaseDate = (DateTime)ViewData["ReceiptReleaseDate"];
+    }
+}
+<div class="container  card shadow font-monospace my-4 p-4">
+    <h2 class="font-monospace font-weight-bold mb-5 p-0">Your invoice: </h2>
+    @foreach (var orderItem in Model)
+    {
+        decimal productQuantityPrice = orderItem.OrderItemUnitPrice * orderItem.OrderItemQuantity;
+        finalPrice += productQuantityPrice;
+        <div class="p-0 m-0">
+            <div class="d-flex">
+                <p class="col-6">Product: @orderItem.OrderItemProduct.ProductName</p>
+                <p class="col-4">Price per unit: @orderItem.OrderItemProduct.ProductPrice$</p>
+            </div>
+            <div class="d-flex">
+                <p class="col-6">Quantity: @orderItem.OrderItemQuantity</p>
+                <p class="col-4">Total: @productQuantityPrice$</p>
+            </div>
+            <hr />
+        </div>
+        <br>
+    }
+    <h2 class="font-weight-bold m-0 p-0"
+        style="font-family: Courier New, Courier, monospace;">
+        Total: <b class="text-danger">
+            Final price: @finalPrice$
+        </b>
+    </h2>
+    @if (releaseDate != null)
+    {
+        <small class="font-monospace text-sm-left">Release Date: @releaseDate</small>
+    }
+    else
+    {
+        <small class="font-monospace text-sm-left">Release Date: ?</small>
+    }
+</div>

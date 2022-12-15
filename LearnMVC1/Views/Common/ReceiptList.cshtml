@@ -1,0 +1,121 @@
+﻿@{
+    List<OrderModel> waitingOrdersOfUser = new List<OrderModel>();
+    List<OrderModel> validOrdersOfUser = new List<OrderModel>();
+    List<ReceiptModel> receiptsOfUser = new List<ReceiptModel>();
+    bool isOutOfOneProduct = false;
+    if (ViewData.ContainsKey("WaitingOrdersOfUser"))
+        waitingOrdersOfUser = (List<OrderModel>)ViewData["WaitingOrdersOfUser"];
+    if (ViewData.ContainsKey("ValidOrdersOfUser"))
+        validOrdersOfUser = (List<OrderModel>)ViewData["ValidOrdersOfUser"];
+    if (ViewData.ContainsKey("ReceiptsOfUser"))
+        receiptsOfUser = (List<ReceiptModel>)ViewData["ReceiptsOfUser"];
+    if (ViewData.ContainsKey("IsOutOfOneProduct"))
+        isOutOfOneProduct = (bool)ViewData["IsOutOfOneProduct"];
+}
+@if (isOutOfOneProduct) { 
+    <input type="hidden" id="isOutOfOneProduct" value="true">
+}
+<h4>Orders Waiting</h4>
+<table class="table table-warning text-center mb-0">
+    <thead class="text-dark">
+        <tr>
+            <th>OrderId</th>
+            <th>UserId</th>
+            <th>Buy Date</th>
+            <th>Status</th>
+            <th>Address</th>
+            <th>PhoneNumber</th>
+        </tr>
+    </thead>
+    <tbody class="align-middle">
+        @foreach (OrderModel order in waitingOrdersOfUser)
+        {
+            <tr>
+                <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
+                <td>Account@(order.AccountId)</td>
+                <td>@order.OrderBuyDate</td>
+                <td>@order.OrderStatus</td>
+                <td>@order.OrderAddress</td>
+                <td>@order.OrderPhone</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+<br>
+<br>
+
+<h4>Orders Accepted</h4>
+<table class="table table-success text-center mb-0">
+    <thead class="text-dark">
+        <tr>
+            <th>OrderId</th>
+            <th>UserId</th>
+            <th>Buy Date</th>
+            <th>Status</th>
+            <th>Address</th>
+            <th>PhoneNumber</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="align-middle">
+        @foreach (OrderModel order in validOrdersOfUser)
+        {
+            <tr>
+                <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
+                <td>Account@(order.AccountId)</td>
+                <td>@order.OrderBuyDate</td>
+                <td>@order.OrderStatus</td>
+                <td>@order.OrderAddress</td>
+                <td>@order.OrderPhone</td>
+                <td>
+                    <a class="btn btn-sm btn-danger" href="/Common/Receipt/Insert?orderId=@order.OrderId&buyDate=@order.OrderBuyDate">Checkout</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br>
+<br>
+
+<!-- receipt co the xem chi tiet duoc -->
+<h4>Receipts</h4>
+<table class="table table-danger text-center mb-0">
+    <thead class="text-dark">
+        <tr>
+            <th>ReceiptId</th>
+            <th>ReleaseDate</th>
+            <th>OrderId</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="align-middle">
+        @foreach(var receipt in receiptsOfUser)
+        {
+            <tr>
+                <td>Receipt@(receipt.ReceiptId)</td>
+                <td>@receipt.ReceiptReleaseDate</td>
+                <td>@receipt.OrderId</td>
+                <td><a class="btn btn-sm btn-warning" href="/Common/Receipt/Detail?orderId=@receipt.OrderId&receiptId=@receipt.ReceiptId">View</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br>
+<br>
+<a class="btn btn-primary" href="/Common/Product/List">Back</a>
+
+<script type="text/javascript">
+    window.onload = function () {
+        let isOutOfOneProduct = ($("#isOutOfOneProduct").val() === 'true');
+		//console.log(isOutOfOneProduct);
+		//console.log(typeof(isOutOfOneProduct));
+
+		if(isOutOfOneProduct  === true)
+			{
+				alert("Có một mặt hàng bạn đặt đã hết xin đợi tới khi hàng về");
+				/* let root = "${pageContext.request.contextPath}"
+				window.location.href = root + "/common/home"; */
+			}
+	}
+</script>

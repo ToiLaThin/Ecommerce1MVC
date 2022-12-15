@@ -132,7 +132,7 @@
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a class="nav-item nav-link" href="<%=request.getContextPath() %>/common/home">Home <span class="sr-only">(current)</span></a>
+                                <a class="nav-item nav-link" href=/Common/Product/List>Home <span class="sr-only">(current)</span></a>
                                 @if (GlobalVar.AccountRole != null)
                                 {
                                     if (GlobalVar.AccountRole.Equals("Admin"))
@@ -183,7 +183,7 @@
                                                 </a>
                                             }
                                             <a class="dropdown-item"
-                                               href="<%=request.getContextPath()%>/common/receipt/list">
+                                               href="/Common/Receipt/List">
                                                 Orders
                                                 and receipts
                                             </a>
