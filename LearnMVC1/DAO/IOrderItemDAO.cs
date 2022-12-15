@@ -8,7 +8,7 @@ namespace LearnMVC1.DAO
 {
     interface IOrderItemDAO
     {
-        void insertToCart(OrderItemModel orderItem);
+        void insertToOrder(OrderItemModel orderItem);
         List<OrderItemModel> findAllByOrderId(int orderId);
     }
 }

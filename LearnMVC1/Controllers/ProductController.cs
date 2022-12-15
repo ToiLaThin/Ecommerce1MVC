@@ -288,6 +288,25 @@ namespace LearnMVC1.Controllers
 
         #endregion
 
+
+        #region Admin 's product controller
+        [Route("/Admin/Product/ChangeStatus")]
+        [HttpGet]
+        public IActionResult ChangeStatus(int productId)
+        {
+            ProductModel product = productDAOImpl.find(productId);
+            int productOldStatus = product.ProductStatus;
+            if (productOldStatus == 0)
+                //inactive
+                product.ProductStatus = 1;
+            else if (productOldStatus == 1)
+                //active
+                product.ProductStatus = 0;
+            productDAOImpl.editProduct(product);
+            return Redirect("/Admin/Account/List");
+        }
+        #endregion
+
         #region Util Methods
         private int isInCart(int productId, List<CartItemModel> cart)
         {

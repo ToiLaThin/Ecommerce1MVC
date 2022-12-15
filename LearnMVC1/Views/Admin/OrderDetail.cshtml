@@ -1,0 +1,61 @@
+﻿@model List<OrderItemModel>
+@{   
+    decimal totalPrice = 0;
+    int orderId = -1;
+    if (ViewData.ContainsKey("OrderId"))
+        orderId = (int)ViewData["OrderId"];
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<div class="text-center mb-4 text-danger">
+    <h2 class="section-title px-5">
+        <span class="px-2">Order@(orderId)</span>
+    </h2>
+</div>
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+
+                        </tr>
+                    </thead>
+
+                    <c:set var="finalPrice" value="0" />
+                    <tbody class="align-middle">
+                        @foreach(OrderItemModel orderItem in Model)
+                        {
+                            <tr>
+                                <td class="align-middle">
+                                    <img src="@orderItem.OrderItemProduct.ProductImage" width="50" height="50" />
+                                </td>
+                                <td class="align-middle">@orderItem.OrderItemProduct.ProductName</td>
+                                <td class="align-middle">@orderItem.OrderItemProduct.ProductPrice€</td>
+
+                                <td class="align-middle">@orderItem.OrderItemQuantity</td>
+                                <td class="align-middle">@(orderItem.OrderItemProduct.ProductPrice * orderItem.OrderItemQuantity) </td>
+                            </tr>
+                            totalPrice += orderItem.OrderItemProduct.ProductPrice * orderItem.OrderItemQuantity;
+                        }
+                        <tr>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"><b class="text-danger">Total</b></td>
+                            <td class="align-middle"><b class="text-success">@totalPrice$</b></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

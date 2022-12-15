@@ -252,6 +252,18 @@ namespace LearnMVC1.Controllers
             }
             return View("/Views/Admin/AccountDetail.cshtml");
         }
+
+        [Route("/Admin/Account/ChangeStatus")]
+        [HttpGet]
+        public IActionResult ChangeStatus(int accountId,int status)
+        {
+            if (status == 1)
+                accountDAOImpl.changeStatus(accountId, 1);
+            else if (status == 0)
+                accountDAOImpl.changeStatus(accountId, 0);
+            return Redirect("/Admin/Account/Detail?accountId=" + accountId);
+        }
+
         #endregion
 
         #region Util Methods

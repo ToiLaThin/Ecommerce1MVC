@@ -1,0 +1,156 @@
+﻿@model List<CartItemModel>
+@{ 
+    decimal productQuantityPrice = 0, finalPrice = 0;
+}
+<!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <form method="post" action="/Common/Order/Insert">
+        <div class="row px-xl-5">
+            <section class="col-lg-8">
+                <div class="mb-4 collapse" id="shipping-address">
+                    <h4 class="font-weight-semi-bold mb-4">Shipping Address</h4>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>First Name</label>
+                            <input class="form-control" type="text" placeholder="John">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Last Name</label>
+                            <input class="form-control" type="text" placeholder="Doe">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>E-mail</label>
+                            <input class="form-control" type="text" placeholder="example@email.com">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Mobile No *</label>
+                            <input class="form-control" type="text" name="phoneNumber" placeholder="Ex: 0928354635" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Deliver Address *</label>
+                            <input class="form-control" type="text" placeholder="123 Street" name="address" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address Line 2</label>
+                            <input class="form-control" type="text" placeholder="123 Street">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Country</label>
+                            <select class="custom-select">
+                                <option selected>United States</option>
+                                <option>England</option>
+                                <option>Japan</option>
+                                <option>Viet Nam</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>City</label>
+                            <input class="form-control" type="text" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>State</label>
+                            <input class="form-control" type="text" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>ZIP Code</label>
+                            <input class="form-control" type="text" placeholder="123">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="shipto">
+                                <label class="custom-control-label" for="shipto" data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <section class="col-lg-4">
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="font-weight-medium mb-3">Products</h5>
+                        <c:set var="finalPrice" value="0" />
+                        @foreach (var cartItem in Model)
+                        {
+                            productQuantityPrice = cartItem.CartItemProduct.ProductPrice * cartItem.CartItemQuantity;
+                            finalPrice += productQuantityPrice;
+                            <div class="d-flex justify-content-between">
+                                <p>@cartItem.CartItemProduct.ProductName (@cartItem.CartItemProduct.ProductPrice$ x @cartItem.CartItemQuantity)</p>
+                                <p>@productQuantityPrice$</p>
+                            </div>
+                        }
+                        <hr class="mt-0">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium">@finalPrice</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium">$6.90</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">@(finalPrice + Convert.ToDecimal(6.90))$</h5>
+                            <input type="hidden" value="@(finalPrice + Convert.ToDecimal(6.90))" name="totalPrice" />
+                        </div>
+                        <div class='d-flex justify-content-between mt-2'>
+                            <h5 class='text-muted'>Date</h5> 
+                            <h5 class='text-muted'>@DateTime.Now.ToLocalTime()</h5>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
+                                <label class="custom-control-label" for="paypal" data-toggle="collapse" data-target="#shipping-address">Paypal</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+                                <label class="custom-control-label" for="directcheck" data-toggle="collapse" data-target="#shipping-address">Direct Check</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                                <label class="custom-control-label" for="banktransfer" data-toggle="collapse" data-target="#shipping-address">Bank Transfer</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <button type="submit" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button>
+                        <a type="button" class="btn btn-lg btn-block btn-secondary font-weight-bold my-3 py-3" href="/Common/Product/List">Back</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </form>
+</div>
+<!-- Checkout End -->
+
+<script type="text/javascript">
+	window.onload = function() {
+		let outOfProduct = ${outOfProduct};
+		console.log(outOfProduct);
+		console.log(typeof(outOfProduct));
+
+		if(outOfProduct === true)
+		{
+			alert("Không còn sản phẩm trong kho nên không thể mua ngay");
+			let root = "${pageContext.request.contextPath}"
+			window.location.href = root + "/common/home";
+		}
+	}
+</script>
