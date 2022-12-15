@@ -203,9 +203,243 @@ namespace LearnMVC1.Controllers
 
         }
 
+        [Route("/Common/Product/Sort")]
+        [HttpGet]
+        public string Sort(string orderBy)
+        {
+            string htmlResult = "";
+            List<ProductModel> productList = productDAOImpl.loadInitNine(orderBy);
+            //isWish sẽ chưa được set nên cần kiểm tra lại
+            foreach (ProductModel product in productList)
+            {
+                if (product.ProductStatus == 0)
+                {
+                    htmlResult += "                         <div class='col-lg-4 col-md-6 col-sm-12 pb-1 product'>\r\n"
+                                + "								<div class='card product-item border-0 mb-4'>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-header product-img position-relative overflow-hidden bg-transparent border p-0'>\r\n"
+                                + "										<img class='' src='" + product.ProductImage + "' alt=''\r\n"
+                                + "											style='width: 100%;' height='360'>\r\n"
+                                + "									</div>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-body border-left border-right text-center p-0 pt-4 pb-3'>\r\n"
+                                + "										<h6 class='text-truncate mb-3'>" + product.ProductName + "</h6>\r\n"
+                                + "										<div class='d-flex justify-content-center'>\r\n"
+                                + "											<h6>" + product.ProductPrice + "</h6>\r\n"
+                                + "											<h6 class='text-muted ml-2'>\r\n"
+                                + "												<del>" + product.ProductPrice + "$ </del>\r\n"
+                                + "											</h6>\r\n"
+                                + "										</div>\r\n"
+                                + "									</div>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-footer d-flex justify-content-between bg-light border'>\r\n"
+                                + "										<a\r\n"
+                                + "											href='/Common/Product/Detail?productId=" + product.ProductId + "'\r\n"
+                                + "											class='btn btn-sm text-dark p-0'><i\r\n"
+                                + "											class='fas fa-eye text-primary mr-1'></i>View Detail</a> \r\n";
+                    if(Global.GlobalVar.IsLogin)
+                    {
+                        if (wishListDAOImpl.isInWishList(product.ProductId, Global.GlobalVar.AccountId))
+                            product.IsWished = true;
+                        else
+                            product.IsWished = false;
+
+                        if (!product.IsWished)
+                        {
+                            htmlResult += "                             <a href='/Common/WishList/Insert?productId=" + product.ProductId + "&accountId=" + Global.GlobalVar.AccountId + "'\r\n"
+                                        + "                                 class='btn btn-sm text-dark p-0'>\r\n"
+                                        + "                                 <i class='far fa-heart text-primary mr-1'></i>Add To Wishlist\r\n"
+                                        + "                             </a>\r\n";
+                        }
+                        else {
+                            htmlResult += "                             <a href='/Common/WishList/Delete?productId=" + product.ProductId + "&accountId=" + Global.GlobalVar.AccountId + "'\r\n"
+                                        + "                                 class='btn btn-sm text-dark p-0'>\r\n"
+                                        + "                                 <i class='fas fa-heart text-primary mr-1'></i>Wished\r\n"
+                                        + "                             </a>\r\n";
+                        }
+                    }
+                    else
+                    {
+                        htmlResult += "                             <a href='/Common/Account/Login'\r\n"
+                                   + "                                 class='btn btn-sm text-dark p-0'>\r\n"
+                                   + "                                 <i class='far fa-heart text-primary mr-1'></i>Add To Wishlist\r\n"
+                                   + "                             </a>\r\n";
+                    }
+                    htmlResult += "							            <a href='/Common/Cart/Add?productId=" + product.ProductId+ "\r\n"
+                                + "											class='btn btn-sm text-dark p-0'><i\r\n"
+                                + "											class='fas fa-shopping-cart text-primary mr-1'></i>Add To Cart</a>\r\n"
+                                + "									</div>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-footer d-flex justify-content-between bg-light border'>";
+                    if (Global.GlobalVar.IsLogin == true)
+                    {
+                        htmlResult += "                             <a\r\n"
+                                + "												href='/Common/Product/BuyNow?productId=${product.productId }'\r\n"
+                                + "												class='btn btn-block text-dark p-0'><i\r\n"
+                                + "												class='fas fa-shopping-cart text-primary mr-1'></i>Buy now</a>";
+                    }
+                    else
+                    {
+                        htmlResult += "                             <a\r\n"
+                                + "												href='/Common/Account/Login'\r\n"
+                                + "												class='btn btn-block text-dark p-0'><i\r\n"
+                                + "												class='fas fa-shopping-cart text-primary mr-1'></i>Buy now</a>";
+                    }
+                    htmlResult += "                                 </div>\r\n"
+                               + "								</div>\r\n"
+                               + "							</div>";
+                }
+                else if (product.ProductStatus == 1)
+                {
+                    htmlResult += "                         <div class='col-lg-4 col-md-6 col-sm-12 pb-1 product'>\r\n"
+                               + "								<div class='card product-item border-0 mb-4 bg-secondary'>\r\n"
+                               + "									<div\r\n"
+                               + "										class='card-header product-img position-relative overflow-hidden bg-transparent border p-0'>\r\n"
+                               + "										<img class='' src='" + product.ProductImage + "' alt=''\r\n"
+                               + "											style='width: 100%;' height='360'>\r\n"
+                               + "									</div>\r\n"
+                               + "									<div\r\n"
+                               + "										class='card-body border-left border-right text-center p-0 pt-4 pb-3'>\r\n"
+                               + "										<h6 class='text-truncate mb-3'>" + product.ProductName + "</h6>\r\n"
+                               + "										<div class='d-flex justify-content-center'>\r\n"
+                               + "											<h6 class='text-muted ml-2'>Locked</h6>\r\n"
+                               + "										</div>\r\n"
+                               + "									</div>\r\n"
+                               + "									<div\r\n"
+                               + "										class='card-footer d-flex justify-content-between bg-light border'>\r\n"
+                               + "										<a\r\n"
+                               + "											href='/Common/Product/Detail?productId=" + product.ProductId + "'\r\n"
+                               + "											class='btn btn-sm text-dark p-0'><i\r\n"
+                               + "											class='fas fa-eye text-primary mr-1'></i>View Detail</a>\r\n"
+                               + "									</div>\r\n"
+                               + "								</div>\r\n"
+                               + "							</div>";
+                }
+            }
+            return htmlResult;
+        }
+
+        [Route("/Common/Product/LoadAjax")]
+        [HttpGet]
+        public string LoadAjax(string orderBy,int currProductsCount)
+        {
+            string htmlResult = "";
+            int skipAmount = currProductsCount;
+            List<ProductModel> nextNineProducts = productDAOImpl.loadNextNine(orderBy,skipAmount);
+            //isWish sẽ chưa được set nên cần kiểm tra lại
+            foreach (ProductModel product in nextNineProducts)
+            {
+                if (product.ProductStatus == 0)
+                {
+                    htmlResult += "                         <div class='col-lg-4 col-md-6 col-sm-12 pb-1 product'>\r\n"
+                                + "								<div class='card product-item border-0 mb-4'>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-header product-img position-relative overflow-hidden bg-transparent border p-0'>\r\n"
+                                + "										<img class='' src='" + product.ProductImage + "' alt=''\r\n"
+                                + "											style='width: 100%;' height='360'>\r\n"
+                                + "									</div>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-body border-left border-right text-center p-0 pt-4 pb-3'>\r\n"
+                                + "										<h6 class='text-truncate mb-3'>" + product.ProductName + "</h6>\r\n"
+                                + "										<div class='d-flex justify-content-center'>\r\n"
+                                + "											<h6>" + product.ProductPrice + "</h6>\r\n"
+                                + "											<h6 class='text-muted ml-2'>\r\n"
+                                + "												<del>" + product.ProductPrice + "$ </del>\r\n"
+                                + "											</h6>\r\n"
+                                + "										</div>\r\n"
+                                + "									</div>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-footer d-flex justify-content-between bg-light border'>\r\n"
+                                + "										<a\r\n"
+                                + "											href='/Common/Product/Detail?productId=" + product.ProductId + "'\r\n"
+                                + "											class='btn btn-sm text-dark p-0'><i\r\n"
+                                + "											class='fas fa-eye text-primary mr-1'></i>View Detail</a> \r\n";
+                    if (Global.GlobalVar.IsLogin)
+                    {
+                        if (wishListDAOImpl.isInWishList(product.ProductId, Global.GlobalVar.AccountId))
+                            product.IsWished = true;
+                        else
+                            product.IsWished = false;
+
+                        if (!product.IsWished)
+                        {
+                            htmlResult += "                             <a href='/Common/WishList/Insert?productId=" + product.ProductId + "&accountId=" + Global.GlobalVar.AccountId + "'\r\n"
+                                        + "                                 class='btn btn-sm text-dark p-0'>\r\n"
+                                        + "                                 <i class='far fa-heart text-primary mr-1'></i>Add To Wishlist\r\n"
+                                        + "                             </a>\r\n";
+                        }
+                        else
+                        {
+                            htmlResult += "                             <a href='/Common/WishList/Delete?productId=" + product.ProductId + "&accountId=" + Global.GlobalVar.AccountId + "'\r\n"
+                                        + "                                 class='btn btn-sm text-dark p-0'>\r\n"
+                                        + "                                 <i class='fas fa-heart text-primary mr-1'></i>Wished\r\n"
+                                        + "                             </a>\r\n";
+                        }
+                    }
+                    else
+                    {
+                        htmlResult += "                             <a href='/Common/Account/Login'\r\n"
+                                   + "                                 class='btn btn-sm text-dark p-0'>\r\n"
+                                   + "                                 <i class='far fa-heart text-primary mr-1'></i>Add To Wishlist\r\n"
+                                   + "                             </a>\r\n";
+                    }
+                    htmlResult += "							            <a href='/Common/Cart/Add?productId=" + product.ProductId + "\r\n"
+                                + "											class='btn btn-sm text-dark p-0'><i\r\n"
+                                + "											class='fas fa-shopping-cart text-primary mr-1'></i>Add To Cart</a>\r\n"
+                                + "									</div>\r\n"
+                                + "									<div\r\n"
+                                + "										class='card-footer d-flex justify-content-between bg-light border'>";
+                    if (Global.GlobalVar.IsLogin == true)
+                    {
+                        htmlResult += "                             <a\r\n"
+                                + "												href='/Common/Product/BuyNow?productId=${product.productId }'\r\n"
+                                + "												class='btn btn-block text-dark p-0'><i\r\n"
+                                + "												class='fas fa-shopping-cart text-primary mr-1'></i>Buy now</a>";
+                    }
+                    else
+                    {
+                        htmlResult += "                             <a\r\n"
+                                + "												href='/Common/Account/Login'\r\n"
+                                + "												class='btn btn-block text-dark p-0'><i\r\n"
+                                + "												class='fas fa-shopping-cart text-primary mr-1'></i>Buy now</a>";
+                    }
+                    htmlResult += "                                 </div>\r\n"
+                               + "								</div>\r\n"
+                               + "							</div>";
+                }
+                else if (product.ProductStatus == 1)
+                {
+                    htmlResult += "                         <div class='col-lg-4 col-md-6 col-sm-12 pb-1 product'>\r\n"
+                               + "								<div class='card product-item border-0 mb-4 bg-secondary'>\r\n"
+                               + "									<div\r\n"
+                               + "										class='card-header product-img position-relative overflow-hidden bg-transparent border p-0'>\r\n"
+                               + "										<img class='' src='" + product.ProductImage + "' alt=''\r\n"
+                               + "											style='width: 100%;' height='360'>\r\n"
+                               + "									</div>\r\n"
+                               + "									<div\r\n"
+                               + "										class='card-body border-left border-right text-center p-0 pt-4 pb-3'>\r\n"
+                               + "										<h6 class='text-truncate mb-3'>" + product.ProductName + "</h6>\r\n"
+                               + "										<div class='d-flex justify-content-center'>\r\n"
+                               + "											<h6 class='text-muted ml-2'>Locked</h6>\r\n"
+                               + "										</div>\r\n"
+                               + "									</div>\r\n"
+                               + "									<div\r\n"
+                               + "										class='card-footer d-flex justify-content-between bg-light border'>\r\n"
+                               + "										<a\r\n"
+                               + "											href='/Common/Product/Detail?productId=" + product.ProductId + "'\r\n"
+                               + "											class='btn btn-sm text-dark p-0'><i\r\n"
+                               + "											class='fas fa-eye text-primary mr-1'></i>View Detail</a>\r\n"
+                               + "									</div>\r\n"
+                               + "								</div>\r\n"
+                               + "							</div>";
+                }
+            }
+            return htmlResult;
+        }
+
         #region Seller 's product controller
 
-        [Route("/Seller/Product/List")]
+            [Route("/Seller/Product/List")]
         [HttpGet]
         public IActionResult ListOfShop(int categoryId, string categoryName)
         {            

@@ -331,14 +331,11 @@
         /* viet tach script ra thi ko loi ? */
         $('#sortBy').on('change', function () {
             let orderBy = $(this).val();
-            let isLogin = "${isLogin}";
-            var root = "${pageContext.request.contextPath}"
             $.ajax({
-                url: root + "/common/product/sort", //send to Controller
+                url: "/Common/Product/Sort", //send to Controller 's action
                 type: "get", //send it through get method
                 data: {
                     orderBy: orderBy,
-                    isLogin: isLogin
                 },
                 success: function (data) {
                     $("#products").empty().append(data);
@@ -361,15 +358,12 @@
             var amount = document.getElementsByClassName("product").length;
             console.log(amount);
             let orderBy = $('#sortBy').val();
-            let isLogin = "${isLogin}";
-            var root = "${pageContext.request.contextPath}"
             $.ajax({
-                url: root + "/common/product/loadAjax", //send to Controller
+                url: "/Common/Product/LoadAjax", //send to Controller
                 type: "get", //send it through get method
                 data: {
                     currProductsCount: amount,
                     orderBy: orderBy,
-                    isLogin: isLogin
                 },
                 success: function (data) {
                     $("#products").append(data);

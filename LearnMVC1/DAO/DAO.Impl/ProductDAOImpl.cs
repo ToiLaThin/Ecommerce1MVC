@@ -23,7 +23,7 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void editProduct(ProductModel product)
         {
-            int producUpdatedCount = _db.Database.ExecuteSqlRaw("Update Product Set productName='" + product.ProductName + "', productDescription='" + product.ProductDescription + "', productPrice=" + product.ProductPrice + ", productImage='" + product.ProductImage + "', productModifiedDate='" + product.ProductModifiedDate + "', productStatus=" + product.ProductStatus + ", id_Product_Category=" + product.CategoryId + ", productRevenue=" + product.ProductRevenue + " Where productId=" + product.ProductId);
+            int producUpdatedCount = _db.Database.ExecuteSqlRaw("Update Product Set productName=N'" + product.ProductName + "', productDescription=N'" + product.ProductDescription + "', productPrice=" + product.ProductPrice + ", productImage='" + product.ProductImage + "', productModifiedDate='" + product.ProductModifiedDate + "', productStatus=" + product.ProductStatus + ", id_Product_Category=" + product.CategoryId + ", productRevenue=" + product.ProductRevenue + " Where productId=" + product.ProductId);
             if (producUpdatedCount == 1)
                 Console.WriteLine("Product Updated Success");
         }
@@ -68,12 +68,38 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public List<ProductModel> loadInitNine(string orderBy)
         {
-            throw new NotImplementedException();
+            if (orderBy.Equals("modifiedDate")){
+                return _db.Products.FromSqlRaw("Select Top 9 * From Product Order By productModifiedDate Desc, productId").ToList();
+            }
+            else if (orderBy.Equals("revenue")){
+                return _db.Products.FromSqlRaw("Select Top 9 * From Product Order By productRevenue Desc, productId").ToList();
+            }
+            else if (orderBy.Equals("price")){
+                return _db.Products.FromSqlRaw("Select Top 9 * From Product Order By productPrice, productId").ToList();
+            }
+            else{
+                return _db.Products.FromSqlRaw("Select Top 9 * From Product").ToList();
+            }
         }
 
         public List<ProductModel> loadNextNine(string orderBy, int skipAmount)
         {
-            throw new NotImplementedException();
+            if (orderBy.Equals("modifiedDate"))
+            {
+                return _db.Products.FromSqlRaw("Select * From Product Order By productModifiedDate Desc, productId Offset " + skipAmount + " Rows Fetch Next 9 Rows Only").ToList();
+            }
+            else if (orderBy.Equals("revenue"))
+            {
+                return _db.Products.FromSqlRaw("Select * From Product Order By productRevenue Desc, productId Offset " + skipAmount + " Rows Fetch Next 9 Rows Only").ToList();
+            }
+            else if (orderBy.Equals("price"))
+            {
+                return _db.Products.FromSqlRaw("Select * From Product Order By productPrice , productId Offset " + skipAmount + " Rows Fetch Next 9 Rows Only").ToList();
+            }
+            else
+            {
+                return _db.Products.FromSqlRaw("Select * From Product Offset " + skipAmount + " Rows Fetch Next 9 Rows Only").ToList();
+            }
         }
     }
 }
