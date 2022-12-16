@@ -60,6 +60,7 @@ namespace LearnMVC1.Controllers
                     bool registerResult = accountDAOImpl.registerAccount(newAccount);
                     if (registerResult == true)
                     {
+                        //trong action Login vẫn có ViewData["RegisterSuccess"] và trên view  cũng vậy
                         ViewData["RegisterSuccess"] = true;
                         //Redirect dùng cho Url nếu mình thay đổi hành vi mặc định(convention) của MVC
                         //View() không thay đổi URL hiện tại mà chỉ render file html ra browser
@@ -121,7 +122,7 @@ namespace LearnMVC1.Controllers
                 else if(accountStatus == 1)
                 {
                     SetDefaultGlobalVar();
-                    ViewData["AccountDisabled"] = true;
+                    //ViewData["AccountDisabled"] = true;
                 }
                 return Redirect("/Common/Product/List");
             }

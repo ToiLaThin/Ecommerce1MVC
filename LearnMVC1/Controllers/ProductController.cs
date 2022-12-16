@@ -35,7 +35,7 @@ namespace LearnMVC1.Controllers
         }
 
         [Route("/Common/Product/List")]
-        public IActionResult ListAll()
+        public IActionResult ListAll(string? accountDisabled)
         {
             var products = productDAOImpl.findAll();
             var categories = categoryDAOImpl.findAll();
