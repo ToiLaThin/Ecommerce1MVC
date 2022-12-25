@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Release\netcoreapp3.1\win-x86\PubTmp\Out\" />
+  <dbfullsql path="D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Release\netcoreapp3.1\win-x86\PubTmp\EFSQLScripts\LearnMVC1.Models.EntityFramwork.ApplicationDbContext.sql" />
+</sitemanifest>

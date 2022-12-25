@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAJcvE9a8fBkGDc9kgyYWrxgAAAAACAAAAAAAQZgAAAAEAACAAAADY/BMwUzucP30BpWx79uvxV4b1IiRF/5t2k6jvn2C1kwAAAAAOgAAAAAIAACAAAAB/93dLG1nToX3QJ+HWVv7QZmhakmQwDwLdJkiIH4JJhIAAAAApKVPN43Xn4nCRCCNwZbeyBiLijVg8Pg27S+1fMOvBAxpA9k8eVl0f8Jgq2hV1TxLr6h6Yih35D+RxOfLWFen0vjtnjnSPj/LlsMmYY/TM3CEEtCYEpPF/3CFvDUiAwvg5/yzOwWJLQNeS31BMvmTcgYDMWGqI033iXrW98Vpp1EAAAADhYO7xANDbnb86/TLTo9r06Mtx/xtJdV8JKNBgn25YRFRnKP9bRVcjkgvM6DV0oFStugFqleRjCfPhvpe9Vy2d</EncryptedPassword>
+    <History>True|2022-12-22T17:33:20.2451869Z;True|2022-12-21T23:13:58.1199454+07:00;True|2022-12-21T23:12:49.4150941+07:00;True|2022-12-21T22:59:06.9864352+07:00;False|2022-12-21T22:55:59.0349916+07:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="MyConnection">
+      <Value>Server=tcp:ducthinh-pc.database.windows.net,1433%3bInitial Catalog=ecom-mvc-db%3bPersist Security Info=False%3bUser ID=thinh%3bPassword=Nh%40u12345%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="LearnMVC1.Models.EntityFramwork.ApplicationDbContext">
+      <Value>Server=tcp:ducthinh-pc.database.windows.net,1433%3bInitial Catalog=ecom-mvc-db%3bPersist Security Info=False%3bUser ID=thinh%3bPassword=Nh%40u12345%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

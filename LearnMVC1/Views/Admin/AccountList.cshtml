@@ -12,8 +12,21 @@
     if (ViewData.ContainsKey("SellerAccounts"))
         sellerAccounts = (List<AccountModel>)ViewData["SellerAccounts"];
 }
+@section CSS {
+    <link href="~/css/tab.css" rel="stylesheet" />
+}
+<div class="tab">
+    <button class="tablinks defaultOpen" onclick="openTab(event,'userAccountsTab')"
+            id="default">
+        User Accounts
+    </button>
+    <button class="tablinks" onclick="openTab(event,'sellerAccountsTab')">Seller Accounts</button>
+    <button class="tablinks" onclick="openTab(event,'allProductsTab')">All Products</button>
+</div>
+<br />
+<br />
 <!-- User Accounts Start -->
-<div class="container-fluid py-5 mb-5">
+<div id="userAccountsTab" class="tabcontents container-fluid py-5 mb-5">
     <div class="text-center mb-4">
         <h2 class="section-title px-5">
             <span class="px-2">User 's Accounts</span>
@@ -57,8 +70,9 @@
     </div>
 </div>
 <!-- User Accounts End -->
+
 <!-- Seller Accounts Start -->
-<div class="container-fluid py-5 mb-5">
+<div id="sellerAccountsTab" class="tabcontents container-fluid py-5 mb-5">
     <div class="text-center mb-4">
         <h2 class="section-title px-5">
             <span class="px-2">Seller 's Accounts</span>
@@ -107,7 +121,7 @@
 
 
 
-<div class="container-fluid mt-3">
+<div id="allProductsTab" class="tabcontents container-fluid mt-3">
     <div class="text-center mb-4">
         <h2 class="section-title px-5">
             <span class="px-2">All Products</span>
@@ -176,6 +190,7 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/tab.js"></script>
     <!-- load back to top -->
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

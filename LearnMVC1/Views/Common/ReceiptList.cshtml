@@ -12,110 +12,130 @@
     if (ViewData.ContainsKey("IsOutOfOneProduct"))
         isOutOfOneProduct = (bool)ViewData["IsOutOfOneProduct"];
 }
-@if (isOutOfOneProduct) { 
+@section CSS {
+    <link href="~/css/tab.css" rel="stylesheet" />
+}
+
+@if (isOutOfOneProduct)
+{
     <input type="hidden" id="isOutOfOneProduct" value="true">
 }
-<h4>Orders Waiting</h4>
-<table class="table table-warning text-center mb-0">
-    <thead class="text-dark">
-        <tr>
-            <th>OrderId</th>
-            <th>UserId</th>
-            <th>Buy Date</th>
-            <th>Status</th>
-            <th>Address</th>
-            <th>PhoneNumber</th>
-        </tr>
-    </thead>
-    <tbody class="align-middle">
-        @foreach (OrderModel order in waitingOrdersOfUser)
-        {
-            <tr>
-                <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
-                <td>Account@(order.AccountId)</td>
-                <td>@order.OrderBuyDate</td>
-                <td>@order.OrderStatus</td>
-                <td>@order.OrderAddress</td>
-                <td>@order.OrderPhone</td>
-            </tr>
-
-        }
-    </tbody>
-</table>
+<div class="tab">
+    <button class="tablinks defaultOpen" onclick="openTab(event,'ordersWaiting')"
+            id="default">
+        Carts Waiting
+    </button>
+    <button class="tablinks" onclick="openTab(event,'ordersAccepted')">Carts Accepted</button>
+    <button class="tablinks" onclick="openTab(event,'receipts')">Receipts</button>
+</div>
 <br>
 <br>
 
-<h4>Orders Accepted</h4>
-<table class="table table-success text-center mb-0">
-    <thead class="text-dark">
-        <tr>
-            <th>OrderId</th>
-            <th>UserId</th>
-            <th>Buy Date</th>
-            <th>Status</th>
-            <th>Address</th>
-            <th>PhoneNumber</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody class="align-middle">
-        @foreach (OrderModel order in validOrdersOfUser)
-        {
+<div id="ordersWaiting" class="container-fluid tabcontents">
+    <table class="table table-warning text-center mb-0">
+        <thead class="text-dark">
             <tr>
-                <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
-                <td>Account@(order.AccountId)</td>
-                <td>@order.OrderBuyDate</td>
-                <td>@order.OrderStatus</td>
-                <td>@order.OrderAddress</td>
-                <td>@order.OrderPhone</td>
-                <td>
-                    <a class="btn btn-sm btn-danger" href="/Common/Receipt/Insert?orderId=@order.OrderId&buyDate=@order.OrderBuyDate">Checkout</a>
-                </td>
+                <th>OrderId</th>
+                <th>UserId</th>
+                <th>Buy Date</th>
+                <th>Status</th>
+                <th>Address</th>
+                <th>PhoneNumber</th>
             </tr>
-        }
-    </tbody>
-</table>
-<br>
-<br>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (OrderModel order in waitingOrdersOfUser)
+            {
+                <tr>
+                    <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
+                    <td>Account@(order.AccountId)</td>
+                    <td>@order.OrderBuyDate</td>
+                    <td>@order.OrderStatus</td>
+                    <td>@order.OrderAddress</td>
+                    <td>@order.OrderPhone</td>
+                </tr>
 
-<!-- receipt co the xem chi tiet duoc -->
-<h4>Receipts</h4>
-<table class="table table-danger text-center mb-0">
-    <thead class="text-dark">
-        <tr>
-            <th>ReceiptId</th>
-            <th>ReleaseDate</th>
-            <th>OrderId</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody class="align-middle">
-        @foreach(var receipt in receiptsOfUser)
-        {
+            }
+        </tbody>
+    </table>
+    <br>
+    <br>
+</div>
+<div id="ordersAccepted" class="container-fluid tabcontents">
+    <h4>Orders Accepted</h4>
+    <table class="table table-success text-center mb-0">
+        <thead class="text-dark">
             <tr>
-                <td>Receipt@(receipt.ReceiptId)</td>
-                <td>@receipt.ReceiptReleaseDate</td>
-                <td>@receipt.OrderId</td>
-                <td><a class="btn btn-sm btn-warning" href="/Common/Receipt/Detail?orderId=@receipt.OrderId&receiptId=@receipt.ReceiptId">View</a></td>
+                <th>OrderId</th>
+                <th>UserId</th>
+                <th>Buy Date</th>
+                <th>Status</th>
+                <th>Address</th>
+                <th>PhoneNumber</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
-<br>
-<br>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (OrderModel order in validOrdersOfUser)
+            {
+                <tr>
+                    <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
+                    <td>Account@(order.AccountId)</td>
+                    <td>@order.OrderBuyDate</td>
+                    <td>@order.OrderStatus</td>
+                    <td>@order.OrderAddress</td>
+                    <td>@order.OrderPhone</td>
+                    <td>
+                        <a class="btn btn-sm btn-danger" href="/Common/Receipt/Insert?orderId=@order.OrderId&buyDate=@order.OrderBuyDate">Checkout</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br>
+    <br>
+</div>
+
+<div id="receipts" class="container-fluid tabcontents">
+    <!-- receipt co the xem chi tiet duoc -->
+    <h4>Receipts</h4>
+    <table class="table table-danger text-center mb-0">
+        <thead class="text-dark">
+            <tr>
+                <th>ReceiptId</th>
+                <th>ReleaseDate</th>
+                <th>OrderId</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (var receipt in receiptsOfUser)
+            {
+                <tr>
+                    <td>Receipt@(receipt.ReceiptId)</td>
+                    <td>@receipt.ReceiptReleaseDate</td>
+                    <td>@receipt.OrderId</td>
+                    <td><a class="btn btn-sm btn-warning" href="/Common/Receipt/Detail?orderId=@receipt.OrderId&receiptId=@receipt.ReceiptId">View</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br>
+    <br>
+</div>
 <a class="btn btn-primary" href="/Common/Product/List">Back</a>
 
 <script type="text/javascript">
     window.onload = function () {
         let isOutOfOneProduct = ($("#isOutOfOneProduct").val() === 'true');
-		//console.log(isOutOfOneProduct);
-		//console.log(typeof(isOutOfOneProduct));
+        //console.log(isOutOfOneProduct);
+        //console.log(typeof(isOutOfOneProduct));
 
-		if(isOutOfOneProduct  === true)
-			{
-				alert("Có một mặt hàng bạn đặt đã hết xin đợi tới khi hàng về");
-				/* let root = "${pageContext.request.contextPath}"
-				window.location.href = root + "/common/home"; */
-			}
-	}
+        if (isOutOfOneProduct === true) {
+            alert("Có một mặt hàng bạn đặt đã hết xin đợi tới khi hàng về");
+            /* let root = "${pageContext.request.contextPath}"
+            window.location.href = root + "/common/home"; */
+        }
+    }
 </script>
+<script src="~/js/tab.js"></script>

@@ -22,7 +22,7 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void editCategory(CategoryModel category)
         {
-            int categoriesUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Update Category Set categoryName=N'{category.CategoryName}',categoryImage={category.CategoryImage} Where categoryId={category.CategoryId}");
+            int categoriesUpdatedCount = _db.Database.ExecuteSqlInterpolated($"Update Category Set categoryName={category.CategoryName},categoryImage={category.CategoryImage} Where categoryId={category.CategoryId}");
             if (categoriesUpdatedCount == 1)
                 Console.WriteLine("Categories updated success");
         }
@@ -40,7 +40,7 @@ namespace LearnMVC1.DAO.DAO.Impl
 
         public void insertCategory(CategoryModel category)
         {
-            int categoriesInsertedCount = _db.Database.ExecuteSqlInterpolated($"Insert Into Category(categoryName,categoryImage,categoryStatus) Values(N'{category.CategoryName}',{category.CategoryImage},0)");
+            int categoriesInsertedCount = _db.Database.ExecuteSqlInterpolated($"Insert Into Category(categoryName,categoryImage,categoryStatus) Values({category.CategoryName},{category.CategoryImage},0)");
             if (categoriesInsertedCount == 1)
                 Console.WriteLine("Categories inserted success");
         }
