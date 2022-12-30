@@ -10,5 +10,8 @@ namespace LearnMVC1.DAO
     {
         void insertToOrder(OrderItemModel orderItem);
         List<OrderItemModel> findAllByOrderId(int orderId);
+        List<OrderItemModel> findAllWaitingOfSeller(int sellerId);
+        void changeStatusToValid(int orderItemId);
+
     }
 }

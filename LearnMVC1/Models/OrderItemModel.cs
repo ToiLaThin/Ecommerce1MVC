@@ -36,6 +36,10 @@ namespace LearnMVC1.Models
         [Required]
         public decimal OrderItemUnitPrice { get; set; }
 
+        [Column("orderItemStatus")]
+        [Required]
+        //thay đổi file migration để giá trị mặc định là 0: chưa duyệt, 1 là đã duyệt
+        public int OrderItemStatus { get; set; }
         public OrderItemModel()
         {
 

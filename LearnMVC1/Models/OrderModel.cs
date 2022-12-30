@@ -43,6 +43,9 @@ namespace LearnMVC1.Models
 
         [Column("orderTotalPrice", TypeName = "decimal(18, 2)")]
         [Required]
-        public decimal OrderTotalPrice { get; set; }        
+        public decimal OrderTotalPrice { get; set; }
+
+        [NotMapped]
+        public bool CanChangeStatus { get; set; } = false;
     }
 }

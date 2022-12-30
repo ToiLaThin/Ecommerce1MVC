@@ -112,6 +112,7 @@ namespace LearnMVC1.Controllers
         public IActionResult List()
         {
             List<OrderModel> waitingOrders = orderDAOImpl.findAllWaiting();
+            CheckOrderCanChangeStatus(waitingOrders);
             List<OrderModel> validOrders = orderDAOImpl.findAllValid();
             List<OrderModel> inValidOrders = orderDAOImpl.findAllInValid();
 
@@ -160,6 +161,31 @@ namespace LearnMVC1.Controllers
                 }
             }
             return isOutOfOneProduct;
+        }
+
+        private void CheckOrderCanChangeStatus(List<OrderModel> waitingOrders)
+        {
+            foreach (OrderModel order in waitingOrders)
+            {
+                List<OrderItemModel> orderItemsOfOrder = orderItemDAOImpl.findAllByOrderId(order.OrderId);
+                bool allValid = true;
+                foreach (OrderItemModel orderItem in orderItemsOfOrder)
+                {
+                    if (orderItem.OrderItemStatus == 0)
+                    {
+                        allValid = false;
+                        break;
+                    }
+                }
+                if (allValid)
+                {
+                    order.CanChangeStatus = true;
+                }
+                else
+                {
+                    order.CanChangeStatus = false;
+                }
+            }
         }
         #endregion
     }
