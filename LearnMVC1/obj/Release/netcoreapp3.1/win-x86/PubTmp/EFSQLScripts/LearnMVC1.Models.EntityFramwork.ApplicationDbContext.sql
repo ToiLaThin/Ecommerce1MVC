@@ -33,7 +33,7 @@ BEGIN
         [productPrice] decimal(18, 6) NOT NULL,
         [productImage] nvarchar(max) NULL,
         [productStatus] int NOT NULL DEFAULT 0,
-        [productModifiedDate] datetime2 NOT NULL DEFAULT '2022-12-23T00:33:04.4711675+07:00',
+        [productModifiedDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.6863304+07:00',
         [productRevenue] int NOT NULL DEFAULT 0,
         CONSTRAINT [PK_Product] PRIMARY KEY ([productId]),
         CONSTRAINT [FK_Product_Category_id_Product_Category] FOREIGN KEY ([id_Product_Category]) REFERENCES [Category] ([categoryId]) ON DELETE NO ACTION
@@ -109,7 +109,7 @@ BEGIN
     CREATE TABLE [Review] (
         [reviewId] int NOT NULL IDENTITY,
         [reviewContent] nvarchar(max) NOT NULL,
-        [reviewDateCreated] datetime2 NOT NULL DEFAULT '2022-12-23T00:33:04.4866386+07:00',
+        [reviewDateCreated] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7006919+07:00',
         [id_Review_Account] int NOT NULL,
         [id_Review_Product] int NOT NULL,
         CONSTRAINT [PK_Review] PRIMARY KEY ([reviewId]),
@@ -180,7 +180,7 @@ BEGIN
     CREATE TABLE [Order] (
         [orderId] int NOT NULL IDENTITY,
         [id_Order_Account] int NOT NULL,
-        [orderBuyDate] datetime2 NOT NULL DEFAULT '2022-12-23T00:33:04.4908027+07:00',
+        [orderBuyDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7046405+07:00',
         [orderStatus] int NOT NULL DEFAULT 0,
         [orderPhone] nvarchar(max) NOT NULL,
         [orderAddress] nvarchar(max) NOT NULL,
@@ -213,7 +213,7 @@ BEGIN
     CREATE TABLE [Receipt] (
         [receiptId] int NOT NULL IDENTITY,
         [id_Receipt_Order] int NOT NULL,
-        [receiptReleaseDate] datetime2 NOT NULL DEFAULT '2022-12-23T00:33:04.4923331+07:00',
+        [receiptReleaseDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7055743+07:00',
         CONSTRAINT [PK_Receipt] PRIMARY KEY ([receiptId]),
         CONSTRAINT [FK_Receipt_Order_id_Receipt_Order] FOREIGN KEY ([id_Receipt_Order]) REFERENCES [Order] ([orderId]) ON DELETE CASCADE
     );
@@ -262,7 +262,7 @@ BEGIN
     CREATE TABLE [Store] (
         [storeId] int NOT NULL IDENTITY,
         [storeName] nvarchar(max) NOT NULL,
-        [storeCreateDate] datetime2 NOT NULL DEFAULT '2022-12-23T00:33:04.5009364+07:00',
+        [storeCreateDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7135042+07:00',
         CONSTRAINT [PK_Store] PRIMARY KEY ([storeId])
     );
 END;
@@ -374,6 +374,75 @@ IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'2022
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20221214061118_ModifyProductAccountRefToSeller', N'3.1.31');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    ALTER TABLE [Account] DROP CONSTRAINT [FK_Account_Seller_id_Account_Seller];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    ALTER TABLE [Product] DROP CONSTRAINT [FK_Product_Seller_id_Product_Seller];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    DECLARE @var1 sysname;
+    SELECT @var1 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Product]') AND [c].[name] = N'id_Product_Seller');
+    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Product] DROP CONSTRAINT [' + @var1 + '];');
+    ALTER TABLE [Product] ALTER COLUMN [id_Product_Seller] int NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    ALTER TABLE [OrderItem] ADD [orderItemStatus] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    DECLARE @var2 sysname;
+    SELECT @var2 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Account]') AND [c].[name] = N'id_Account_Seller');
+    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Account] DROP CONSTRAINT [' + @var2 + '];');
+    ALTER TABLE [Account] ALTER COLUMN [id_Account_Seller] int NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    ALTER TABLE [Account] ADD CONSTRAINT [FK_Account_Seller_id_Account_Seller] FOREIGN KEY ([id_Account_Seller]) REFERENCES [Seller] ([sellerId]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    ALTER TABLE [Product] ADD CONSTRAINT [FK_Product_Seller_id_Product_Seller] FOREIGN KEY ([id_Product_Seller]) REFERENCES [Seller] ([sellerId]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20221230025937_AddStatusToOrderItem')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20221230025937_AddStatusToOrderItem', N'3.1.31');
 END;
 
 GO

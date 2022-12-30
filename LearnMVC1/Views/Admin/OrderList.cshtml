@@ -48,8 +48,15 @@
                     <td>@order.OrderAddress</td>
                     <td>@order.OrderPhone</td>
                     <td>
-                        <a class="btn btn-sm btn-danger" href="/Admin/Order/ChangeStatus?orderId=@(order.OrderId)&status=InValid">Mark Invalid</a>
-                        <a class="btn btn-sm btn-success" href="/Admin/Order/ChangeStatus?orderId=@(order.OrderId)&status=Valid">Mark Valid</a>
+                        @if (order.CanChangeStatus)
+                        {
+                            <a class="btn btn-sm btn-danger" href="/Admin/Order/ChangeStatus?orderId=@(order.OrderId)&status=InValid">Mark Invalid</a>
+                            <a class="btn btn-sm btn-success" href="/Admin/Order/ChangeStatus?orderId=@(order.OrderId)&status=Valid">Mark Valid</a>
+                        }
+                        else
+                        {
+                            <small class="text-secondary">Wait for seller validate</small>
+                        }
                     </td>
                 </tr>
 
