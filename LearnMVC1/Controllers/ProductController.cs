@@ -21,6 +21,7 @@ namespace LearnMVC1.Controllers
         ReviewDAOImpl reviewDAOImpl;
         InventoryDAOImpl inventoryDAOImpl;
         StoreDAOImpl storeDAOImpl;
+        SellerDAOImpl sellerDAOImpl;
 
         public ProductController(ApplicationDbContext db)
         {
@@ -32,6 +33,7 @@ namespace LearnMVC1.Controllers
             reviewDAOImpl = new ReviewDAOImpl(_db);
             inventoryDAOImpl = new InventoryDAOImpl(_db);
             storeDAOImpl = new StoreDAOImpl(_db);
+            sellerDAOImpl = new SellerDAOImpl(_db);
         }
 
         [Route("/Common/Product/List")]
@@ -88,6 +90,9 @@ namespace LearnMVC1.Controllers
             else
                 productQuantityInCart = 0;
 
+            int storeId = sellerDAOImpl.findStoreId((int)product.SellerId);
+            StoreModel store = storeDAOImpl.findStore(storeId);
+
 
             string username = HttpContext.Session.GetString("accountUserName");
             if (username != null)
@@ -97,6 +102,7 @@ namespace LearnMVC1.Controllers
                 string accountImage = accountDAOImpl.findById(accountDAOImpl.findAccountId(username)).AccountImage;
                 ViewData["AccountImage"] = accountImage;
             }
+            ViewData["Store"] = store;
             ViewData["ProductAmountInInventory"] = productAmountInInventory;
             ViewData["ProductQuantityInCart"] = productQuantityInCart;
             ViewData["Product"] = product;
@@ -197,7 +203,7 @@ namespace LearnMVC1.Controllers
             }
             else
             {
-                ViewData["OutOfProduct"] = true;
+                TempData["OutOfProduct"] = true;
                 return Redirect("/Common/Product/List");
             }    
 

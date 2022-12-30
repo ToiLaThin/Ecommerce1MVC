@@ -1,0 +1,60 @@
+﻿@*from account controller displayed on Common/AccountLogin.cshtml*@
+@if (TempData["LoginFailed"] != null && (bool)TempData["LoginFailed"] == true)
+{
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr["error"]("Login Failed");
+    </script>
+}
+
+@*from account controller displayed on Common/AccountLogin.cshtml*@
+@if (TempData["RegisterSuccess"] != null && (bool)TempData["RegisterSuccess"] == true)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr["success"]("Register success. Log in to continue");
+    </script>
+}
+
+@*from account controller displayed on Common/ProductList.cshtml*@
+@if (TempData["AccountDisabled"] != null && (bool)TempData["AccountDisabled"] == true)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr["warning"]("Account Locked by admin. Contact admin");
+    </script>
+}
+
+@*from product controller action BuyNow và cart controller action AddProductToCart displayed on Common/ProductList.cshtml and Common/Cart.cshtml*@
+@if (TempData["OutOfProduct"] != null && (bool)TempData["OutOfProduct"] == true)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr["error"]("That product is out of stock. Cannot buy now so please come back later");
+    </script>
+}
+
+@*from order controller action InsertPost displayed on Common/ProductList.cshtml*@
+@if (TempData["OrderSuccess"] != null && (bool)TempData["OrderSuccess"] == true)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr["info"]("Order created successfully");
+    </script>
+}
+
+@*from order controller action InsertPost displayed on Common/OrderInsert.cshtml*@
+@if (TempData["OrderSuccess"] != null && (bool)TempData["OrderSuccess"] == false)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr["error"]("One of the order 's product is out of stock. Please wait");
+    </script>
+}

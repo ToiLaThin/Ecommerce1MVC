@@ -1,26 +1,7 @@
-﻿@{
-    bool loginFailed, registerSuccess = false;
-    if (ViewData.ContainsKey("RegisterSuccess"))
-        registerSuccess = true;
-if (ViewData.ContainsKey("LoginFailed"))
-    {
-        loginFailed = (bool)ViewData["LoginFailed"];
-    }
-    else
-    {
-        loginFailed = false;
-    }
-}
+﻿
+
+<partial name="~/Views/Shared/_NotificationScriptsPartial.cshtml" />
 <div class="container card mt-2 mb-5 p-3 border-rounded">
-    @if (registerSuccess)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Register success!</strong> You should log in to continue.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
     <form role="form" action="/common/account/login" method="post">
         <h2>Login Page</h2>
         <div class="form-group">
@@ -28,12 +9,7 @@ if (ViewData.ContainsKey("LoginFailed"))
         </div>
         <div class="form-group">
             Password: <input class="form-control" type="password" name="password" placeholder="Nhập password của bạn:" required><br>
-        </div>
-        @if (loginFailed)
-        {
-            <span class="text-danger">Login Failed</span>
-            <br>
-        }
+        </div>     
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 </div>

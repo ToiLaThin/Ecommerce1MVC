@@ -61,7 +61,7 @@ namespace LearnMVC1.Controllers
                     if (registerResult == true)
                     {
                         //trong action Login vẫn có ViewData["RegisterSuccess"] và trên view  cũng vậy
-                        ViewData["RegisterSuccess"] = true;
+                        TempData["RegisterSuccess"] = true;
                         //Redirect dùng cho Url nếu mình thay đổi hành vi mặc định(convention) của MVC
                         //View() không thay đổi URL hiện tại mà chỉ render file html ra browser
                         //RedirectToRoute là dựa theo route table chứ ko phải [Route("") ]
@@ -122,14 +122,14 @@ namespace LearnMVC1.Controllers
                 else if(accountStatus == 1)
                 {
                     SetDefaultGlobalVar();
-                    //ViewData["AccountDisabled"] = true;
+                    TempData["AccountDisabled"] = true;
                 }
                 return Redirect("/Common/Product/List");
             }
             else
             {
                 SetDefaultGlobalVar();
-                ViewData["LoginFailed"] = true;
+                TempData["LoginFailed"] = true;
                 return View("/Views/Common/AccountLogin.cshtml");
             }
 

@@ -39,7 +39,7 @@ namespace LearnMVC1.Controllers
 					cart.Add(new CartItemModel(productDAOImpl.find(productId), 1));
 				}
 				else
-					ViewData["OutOfProduct"] = true;
+					TempData["OutOfProduct"] = true;
 
 			}
 			else
@@ -53,7 +53,7 @@ namespace LearnMVC1.Controllers
 					if (productAmountInInventory > 0)
 						cart.Add(new CartItemModel(productDAOImpl.find(productId), 1));
 					else
-						ViewData["OutOfProduct"] = true;
+						TempData["OutOfProduct"] = true;
 				}
 				else
 				{
@@ -66,7 +66,7 @@ namespace LearnMVC1.Controllers
 					}
 					else
 					{
-						ViewData["OutOfProduct"] = true;
+						TempData["OutOfProduct"] = true;
 						quantity -= 1;
 						cart[productIndexInCart].CartItemQuantity = quantity;
 					}

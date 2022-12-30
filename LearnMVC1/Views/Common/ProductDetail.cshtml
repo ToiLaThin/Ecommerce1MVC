@@ -2,6 +2,7 @@
 @{
     int productAmountInInventory = (int)ViewData["ProductAmountInInventory"];
     int productQuantityInCart = (int)ViewData["ProductQuantityInCart"];
+    var store = (StoreModel)ViewData["Store"];
     var product = (ProductModel)ViewData["Product"];
     var reviews = (List<ReviewModel>)ViewData["Reviews"];
     int reviewsCount = (int)ViewData["ReviewsCount"];
@@ -58,7 +59,7 @@
 
         <div class="col-lg-7 pb-5">
             <input id="productId" type="hidden" value="@product.ProductId" />
-            <h3 class="font-weight-semi-bold">@product.ProductName</h3>
+            <h3 class="font-weight-semi-bold">@product.ProductName</h3><small class="mb-4 text-muted"> By: <a href="/Common/Product/FilterByStore?storeId=@store.StoreId">@store.StoreName </a></small><br>
             @if (GlobalVar.IsLogin)
             {
                 if (GlobalVar.AccountRole.Equals("Admin"))

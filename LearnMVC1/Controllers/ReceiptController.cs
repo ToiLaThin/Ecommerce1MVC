@@ -54,49 +54,15 @@ namespace LearnMVC1.Controllers
         [HttpGet]
         public IActionResult CheckOut(int orderId,DateTime buyDate)
         {
-			//tìm tất cả cartItem thuộc về cartId
-			List<OrderItemModel> orderItemsOfOrder = orderItemDAOImpl.findAllByOrderId(orderId);
-			//hàm kiểm tra tất cả CartItem ko  hề có outOfProduct
-			bool isOutOfOneProduct = IsOutOfOneProduct(orderItemsOfOrder);
+			ReceiptModel receiptToInsert = new ReceiptModel();
+			receiptToInsert.ReceiptReleaseDate = buyDate;
+			receiptToInsert.OrderId = orderId;
 
-
-			//cập nhật inventory nếu ko có món hàng nào thiếu số lượng
-			if (!isOutOfOneProduct)
-			{
-				//duyệt qua từng -> lấy productId, quantity -> tính ra newAmount rồi gọi updateInventory có product đó
-				foreach (OrderItemModel orderItem in orderItemsOfOrder)
-				{
-					int productId = orderItem.ProductId;
-					int quantity = orderItem.OrderItemQuantity;
-
-					//cập nhật revenue của sản phẩm cộng thêm quantity
-					ProductModel productToEdit = productDAOImpl.find(productId);
-					int currProductRevenue = productToEdit.ProductRevenue;
-					productToEdit.ProductRevenue = currProductRevenue + quantity;
-					productDAOImpl.editProduct(productToEdit);
-
-					int productAmountInInventory = inventoryDAOImpl.findAmount(productId);
-					int newProductAmountInInventory = productAmountInInventory - quantity;
-					//đã kiểm tra
-					inventoryDAOImpl.updateInventory(productId, newProductAmountInInventory);
-                    Console.WriteLine(inventoryDAOImpl.findAmount(productId));
-					ReceiptModel receiptToInsert = new ReceiptModel();
-					receiptToInsert.ReceiptReleaseDate = buyDate;
-					receiptToInsert.OrderId = orderId;
-
-					receiptDAOImpl.insertReceipt(receiptToInsert);
-					orderDAOImpl.changeStatusToCheckedOut(orderId);
-				}
-				return Redirect("/Common/Receipt/List");
-			}
-			else
-			{
-				//ko thêm id 
-				//ko thêm hóa đơn
-				//action này ở trên
-				return Redirect("/Common/Receipt/List?isOutOfOneProduct=true");
-
-			}
+			receiptDAOImpl.insertReceipt(receiptToInsert);
+			orderDAOImpl.changeStatusToCheckedOut(orderId);
+			return Redirect("/Common/Receipt/List");
+            //ko dc sử dụng vì số lượng sản phẩm đã bị trừ từ khi order
+			//return Redirect("/Common/Receipt/List?isOutOfOneProduct=true");
 		}
 
 		//multiple route for one action
@@ -111,25 +77,6 @@ namespace LearnMVC1.Controllers
 			ViewData["ReceiptReleaseDate"] = releaseDate;
 			return View("/Views/Common/ReceiptDetail.cshtml",orderItems);
 		}
-		#region Util Methods
-		private bool IsOutOfOneProduct(List<OrderItemModel> orderItemsOfOrder)
-		{
-			bool isOutOfOneProduct = false;
-			foreach (OrderItemModel orderItem in orderItemsOfOrder)
-			{
-				//có include product model trong query
-				int productId = orderItem.OrderItemProduct.ProductId;
-				int quantity = orderItem.OrderItemQuantity;
-				int productAmountInInventory = inventoryDAOImpl.findAmount(productId);
-
-				if (productAmountInInventory < quantity)
-				{
-					isOutOfOneProduct = true;
-					break;
-				}
-			}
-			return isOutOfOneProduct;
-		}
-		#endregion
+		
 	}
 }

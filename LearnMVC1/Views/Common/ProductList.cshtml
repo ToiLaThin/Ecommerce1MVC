@@ -2,13 +2,14 @@
     //code như thế này sẽ ít nguy hiểm hơn foreach trực tiếp trên ViewData vì nó có thể null
     List<ProductModel> products = new List<ProductModel>();
     List<CategoryModel> categories = new List<CategoryModel>();
-    bool accountDisabled = false;
     if (ViewData.ContainsKey("Products"))
         products = (List<ProductModel>)ViewData["Products"];
     if (ViewData.ContainsKey("Categories"))
         categories = (List<CategoryModel>)ViewData["Categories"];
 }
 @model List<ProductModel>
+<partial name="~/Views/Shared/_NotificationScriptsPartial.cshtml"/>
+
 <!-- Shop Start -->
 <div class="container-fluid pt-5">
     <div class="row px-xl-5">
