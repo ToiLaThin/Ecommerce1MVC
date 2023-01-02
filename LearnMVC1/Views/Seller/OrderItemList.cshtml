@@ -29,7 +29,7 @@
                     <td><img src="@orderItem.OrderItemProduct.ProductImage" width="50" height="50" /></td>
                     <td>@orderItem.OrderId</td>
                     <td>
-                        <a class="btn btn-sm btn-success" href="<%=request.getContextPath() %>/seller/orderItem/changeValid/?cartItemId=${orderItem.cartItemId}">Mark Valid</a>
+                        <a class="btn btn-sm btn-success rounded" href="/Seller/OrderItem/ChangeStatus?orderItemId=@orderItem.OrderItemId&status=Valid"><i class="fas fa-check"></i></a>
                     </td>
                 </tr>
             }    

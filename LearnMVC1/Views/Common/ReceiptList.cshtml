@@ -78,17 +78,37 @@
         <tbody class="align-middle">
             @foreach (OrderModel order in validOrdersOfUser)
             {
-                <tr>
-                    <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
-                    <td>Account@(order.AccountId)</td>
-                    <td>@order.OrderBuyDate</td>
-                    <td>@order.OrderStatus</td>
-                    <td>@order.OrderAddress</td>
-                    <td>@order.OrderPhone</td>
-                    <td>
-                        <a class="btn btn-sm btn-danger" href="/Common/Receipt/Insert?orderId=@order.OrderId&buyDate=@order.OrderBuyDate">Checkout</a>
-                    </td>
-                </tr>
+            <tr>
+                <td><a class="text-decoration-none" href="/Admin/Order/Detail?orderId=@(order.OrderId)">Order@(order.OrderId)</a></td>
+                <td>Account@(order.AccountId)</td>
+                <td>@order.OrderBuyDate</td>
+                <td>@order.OrderStatus</td>
+                <td>@order.OrderAddress</td>
+                <td>@order.OrderPhone</td>
+                @{
+                    var parameters = new Dictionary<String, String>
+                    {
+                        {"payment", order.OrderTotalPrice.ToString()},
+                        {"orderId", order.OrderId.ToString()},
+                        {"buyDate",order.OrderBuyDate.ToString() },
+                    };
+}
+                <td>
+                    @if (order.OrderPaymentMethod.Equals("directcheck") || order.OrderPaymentMethod.Equals("paypal"))
+                    {
+                        <a class="btn btn-lg btn-danger rounded" href="/Common/Receipt/Insert?orderId=@order.OrderId&buyDate=@order.OrderBuyDate">Direct Check</a>
+                    }
+                    else if (order.OrderPaymentMethod.Equals("momo"))
+                    {
+                        <a class="btn btn-lg rounded" style="background-color:hotpink; color: #fff" asp-controller="Order" asp-action="MomoProcessPayment" asp-all-route-data="parameters"><i class="fas fa-piggy-bank fs-4 mr-2"></i>Momo</a>
+                    }
+                    else if (order.OrderPaymentMethod.Equals("stripe"))
+                    {
+                        <a class="btn btn-lg rounded" style="background-color:blueviolet; color: #fff" asp-controller="Order" asp-action="StripeProcessPayment" asp-all-route-data="parameters"><i class="fab fa-cc-stripe  mr-2"></i>Stripe</a>
+                    }
+
+                </td>
+            </tr>
             }
         </tbody>
     </table>

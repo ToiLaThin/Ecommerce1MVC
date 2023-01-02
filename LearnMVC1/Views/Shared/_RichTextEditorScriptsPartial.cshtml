@@ -1,0 +1,10 @@
+﻿
+<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+    @*script to create rich text editor*@
+<script>
+        ClassicEditor
+            .create(document.querySelector('#RichTextEditor'))
+            .catch(error => {
+                console.error(error);
+            });
+</script>

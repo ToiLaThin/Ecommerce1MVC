@@ -33,7 +33,7 @@ BEGIN
         [productPrice] decimal(18, 6) NOT NULL,
         [productImage] nvarchar(max) NULL,
         [productStatus] int NOT NULL DEFAULT 0,
-        [productModifiedDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.6863304+07:00',
+        [productModifiedDate] datetime2 NOT NULL DEFAULT '2022-12-30T21:28:09.7513342+07:00',
         [productRevenue] int NOT NULL DEFAULT 0,
         CONSTRAINT [PK_Product] PRIMARY KEY ([productId]),
         CONSTRAINT [FK_Product_Category_id_Product_Category] FOREIGN KEY ([id_Product_Category]) REFERENCES [Category] ([categoryId]) ON DELETE NO ACTION
@@ -109,7 +109,7 @@ BEGIN
     CREATE TABLE [Review] (
         [reviewId] int NOT NULL IDENTITY,
         [reviewContent] nvarchar(max) NOT NULL,
-        [reviewDateCreated] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7006919+07:00',
+        [reviewDateCreated] datetime2 NOT NULL DEFAULT '2022-12-30T21:28:09.7699584+07:00',
         [id_Review_Account] int NOT NULL,
         [id_Review_Product] int NOT NULL,
         CONSTRAINT [PK_Review] PRIMARY KEY ([reviewId]),
@@ -180,7 +180,7 @@ BEGIN
     CREATE TABLE [Order] (
         [orderId] int NOT NULL IDENTITY,
         [id_Order_Account] int NOT NULL,
-        [orderBuyDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7046405+07:00',
+        [orderBuyDate] datetime2 NOT NULL DEFAULT '2022-12-30T21:28:09.7744764+07:00',
         [orderStatus] int NOT NULL DEFAULT 0,
         [orderPhone] nvarchar(max) NOT NULL,
         [orderAddress] nvarchar(max) NOT NULL,
@@ -213,7 +213,7 @@ BEGIN
     CREATE TABLE [Receipt] (
         [receiptId] int NOT NULL IDENTITY,
         [id_Receipt_Order] int NOT NULL,
-        [receiptReleaseDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7055743+07:00',
+        [receiptReleaseDate] datetime2 NOT NULL DEFAULT '2022-12-30T21:28:09.7759367+07:00',
         CONSTRAINT [PK_Receipt] PRIMARY KEY ([receiptId]),
         CONSTRAINT [FK_Receipt_Order_id_Receipt_Order] FOREIGN KEY ([id_Receipt_Order]) REFERENCES [Order] ([orderId]) ON DELETE CASCADE
     );
@@ -262,7 +262,7 @@ BEGIN
     CREATE TABLE [Store] (
         [storeId] int NOT NULL IDENTITY,
         [storeName] nvarchar(max) NOT NULL,
-        [storeCreateDate] datetime2 NOT NULL DEFAULT '2022-12-30T13:55:18.7135042+07:00',
+        [storeCreateDate] datetime2 NOT NULL DEFAULT '2022-12-30T21:28:09.7968716+07:00',
         CONSTRAINT [PK_Store] PRIMARY KEY ([storeId])
     );
 END;

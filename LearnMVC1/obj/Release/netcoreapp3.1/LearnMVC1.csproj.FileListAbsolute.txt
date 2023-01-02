@@ -447,3 +447,4 @@ D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\bin\Release\netcoreapp3.1\zh-Hans
 D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\bin\Release\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Release\netcoreapp3.1\Razor\Views\Seller\OrderItemList.cshtml.g.cs
 D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Release\netcoreapp3.1\Razor\Views\Shared\_NotificationScriptsPartial.cshtml.g.cs
+D:\Bi\Bi code\ASP.NET Core\LearnMVC1\LearnMVC1\obj\Release\netcoreapp3.1\Razor\Views\Shared\_RichTextEditorScriptsPartial.cshtml.g.cs

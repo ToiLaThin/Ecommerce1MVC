@@ -47,5 +47,10 @@ namespace LearnMVC1.Models
 
         [NotMapped]
         public bool CanChangeStatus { get; set; } = false;
+
+        //thay đổi file migration để giá trị mặc định là directcheck
+        [Column("orderPaymentMethod")]
+        [Required]
+        public string OrderPaymentMethod { get; set; }
     }
 }
